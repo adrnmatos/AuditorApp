@@ -23,8 +23,14 @@ public class Photo {
         this(UUID.randomUUID());
     }
 
+    public Photo()
+
     public UUID getId() {
         return mId;
+    }
+
+    public void setId(UUID mId) {
+        this.mId = mId;
     }
 
     public String getTitle() {

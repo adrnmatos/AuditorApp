@@ -2,9 +2,12 @@ package br.gov.am.tce.auditor;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +20,19 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,9 +45,17 @@ import static android.widget.CompoundButton.*;
  */
 
 public class PhotoListFragment extends Fragment {
+    private static final String TAG = "PhotoListFragment";
+    private static final String MESSAGES = "Photo_Messages";
+
     private RecyclerView mPhotoRecyclerView;
     private PhotoAdapter mAdapter;
     private List<String> mPhotoMapList = new ArrayList<>();
+    private List<Photo> mPhotoList = new ArrayList<>();
+
+    // database and storage server reference variables
+    private DatabaseReference mDatabaseReference;
+    private StorageReference mStorageReference;
 
     public static Fragment newInstance() {
         return new PhotoListFragment();
@@ -41,6 +65,9 @@ public class PhotoListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
     @Nullable
@@ -96,8 +123,76 @@ public class PhotoListFragment extends Fragment {
                     startActivity(mapIntent);
                     return true;
                 }
+            case R.id.upload_photo:
+                if(mPhotoList.size() != 0) {
+                    uploadPhotos();
+                }
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void uploadPhotos() {
+        // check if there is already uploaded photos
+
+        // iterate over mPhotoMapList
+        for (Photo photo: mPhotoList) {
+            // upload each photo and register it on RTD
+            File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
+            final Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "br.gov.am.tce.auditor.fileprovider", mPhotoFile);
+
+            mDatabaseReference.child(MESSAGES).push().setValue(photo, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if(databaseError == null) {
+                        String key = databaseReference.getKey();
+                        StorageReference storageReference = FirebaseStorage.getInstance()
+                                .getReference().child(key)
+                                .child(uri.getLastPathSegment());
+                        storageReference.putFile(uri).addOnCompleteListener(MainActivity.this,
+                                new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                        if(task.isSuccessful()) {
+                                            Photo photo = new Photo()
+                                        }
+                                    }
+                                })
+                    }
+                    else {
+                        Log.w(TAG, "Unable to write to database", databaseError.toException());
+                    }
+                }
+            });
+
+/*
+            mStorageReference.child(MESSAGES)putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            // Getting image name from EditText and store into string variable.
+                            String TempImageName = photo.getTitle();
+
+                            @SuppressWarnings("VisibleForTests")
+                            ImageUploadInfo imageUploadInfo = new ImageUploadInfo(TempImageName, taskSnapshot.getDownloadUrl().toString());
+
+                            // Getting image upload ID.
+                            String ImageUploadId = mDatabaseReference.push().getKey();
+
+                            // Adding image upload id s child element into databaseReference.
+                            mDatabaseReference.child(ImageUploadId).setValue(imageUploadInfo);
+                        }
+                    })
+                    // If something goes wrong .
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(getActivity(), "SOMETHING GOES WRONG", Toast.LENGTH_LONG).show();
+                        }
+                    });
+*/
         }
     }
 
@@ -121,7 +216,7 @@ public class PhotoListFragment extends Fragment {
         @Override
         public void onBindViewHolder(PhotoHolder holder, int position) {
             Photo photo = mPhotos.get(position);
-            ((PhotoHolder)holder).bindPhotoItem(photo);
+            holder.bindPhotoItem(photo);
         }
 
         @Override
@@ -135,7 +230,7 @@ public class PhotoListFragment extends Fragment {
     }
 
 
-    // ****************   HOLDER CLASS   **************************************************  //
+    // ****************   PHOTO HOLDER CLASS   ********************************************* //
     private class PhotoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView mPhotoImageView;
         private CheckBox mPhotoCheckBox;
@@ -144,21 +239,24 @@ public class PhotoListFragment extends Fragment {
         public PhotoHolder(View itemView) {
             super(itemView);
 
-            mPhotoImageView = (ImageView) itemView.findViewById(R.id.photo_image_view);
-            mPhotoCheckBox = (CheckBox) itemView.findViewById(R.id.photo_checkbox);
+            mPhotoImageView = itemView.findViewById(R.id.photo_image_view);
+            mPhotoCheckBox = itemView.findViewById(R.id.photo_checkbox);
             itemView.setOnClickListener(this);
         }
 
-        public void bindPhotoItem(Photo photo) {
+        public void bindPhotoItem(final Photo photo) {
             mPhoto = photo;
 
+            // remove mPhotoMapList variable after update Photo class with parcelable or serializable interface
             mPhotoCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b) {
                         mPhotoMapList.add(mPhoto.getId().toString());
+                        mPhotoList.add(mPhoto);
                     } else {
                         mPhotoMapList.remove(mPhoto.getId().toString());
+                        mPhotoList.remove(mPhoto);
                     }
                 }
             });

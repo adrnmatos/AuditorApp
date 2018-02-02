@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Auditor</string>
     <string name="title_activity_maps">Map</string>
-    <string name="new_photo">Nova Foto</string>
-    <string name="remove_photo">Remove Foto</string>
+    <string name="new_photo_list_menu">Nova Foto</string>
+    <string name="remove_photo_menu">Remove Foto</string>
     <string name="photo_title_label">Titulo</string>
     <string name="photo_title_hint">Entre com um titulo para a foto.</string>
-    <string name="map_photo">Mostrar no Mapa</string>
+    <string name="map_photo_list_menu">Mostrar no Mapa</string>
+    <string name="upload_photo_list_menu">Upload Foto</string>
     <string name="sign_in">Sign In</string>
 </resources>

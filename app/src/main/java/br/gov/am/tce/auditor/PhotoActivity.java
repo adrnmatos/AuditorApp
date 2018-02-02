@@ -111,14 +111,14 @@ public class PhotoActivity extends AppCompatActivity {
 
         configureLocationRequest();
 
-        mPhotoView = (ImageView) findViewById(R.id.photo_view);
+        mPhotoView = findViewById(R.id.photo_view);
         updatePhotoView();
 
-        mCameraButton = (ImageButton) findViewById(R.id.photo_camera);
+        mCameraButton = findViewById(R.id.photo_camera);
         boolean canTakePhoto = mPhotoFile != null && captureImageIntent.resolveActivity(getPackageManager()) != null;
         mCameraButton.setEnabled(canTakePhoto);
 
-        mTitleField = (EditText) findViewById(R.id.photo_note);
+        mTitleField = findViewById(R.id.photo_note);
         mTitleField.setText(mPhoto.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -208,6 +208,7 @@ public class PhotoActivity extends AppCompatActivity {
             grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         }
 
+        /* TODO: To check what if cancel photo since assigning latitude and longitude before it is taken */
         mPhoto.setLatitude(mLastLocation.getLatitude());
         mPhoto.setLongitude(mLastLocation.getLongitude());
 
@@ -234,7 +235,7 @@ public class PhotoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.delete_photo:
                 PhotoLab.get(this).deletePhoto(mPhoto);
-                // TODO: to check if there is missing file on filesystem and still need to delete it
+                /* TODO: to check if there is missing file on filesystem and still need to delete it */
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
@@ -251,7 +252,7 @@ public class PhotoActivity extends AppCompatActivity {
             revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             updatePhotoView();
         } else if (requestCode == REQUEST_CHECK_SETTINGS) {
-            // return here from location settings dialog
+            // TODO: To handle check setting request
         }
     }
 
