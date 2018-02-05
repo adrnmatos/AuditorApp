@@ -16,17 +16,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
 
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-    private static final String ARG_PHOTO_IDS = "photo_ids";
+    private static final String ARG_PHOTOS = "photo_list";
 
-    private ArrayList<String> uuidArrayList;
+    private List<Photo> photoList;
     private GoogleMap mMap;
 
-    public static MapsFragment newInstance(ArrayList<String> uuidArrayList) {
+    public static MapsFragment newInstance(List<Photo> photoList) {
         Bundle args = new Bundle();
-        args.putStringArrayList(ARG_PHOTO_IDS, uuidArrayList);
+        args.putSerializable(ARG_PHOTOS, (ArrayList<Photo>)photoList);
         MapsFragment fragment = new MapsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -36,7 +36,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        uuidArrayList = getArguments().getStringArrayList(ARG_PHOTO_IDS);
+        photoList = (ArrayList<Photo>) getArguments().getSerializable(ARG_PHOTOS);
         getMapAsync(this);
     }
 
@@ -53,14 +53,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                     mapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
-                    for(String stringId : uuidArrayList) {
-                        UUID photoId = UUID.fromString(stringId);
-                        Photo photo = PhotoLab.get(getActivity()).getPhoto(photoId);
+                    for(Photo photo : photoList) {
                         LatLng coords = new LatLng(photo.getLatitude(), photo.getLongitude());
                         boundsBuilder.include(coords);
 
                         Marker marker = mMap.addMarker(new MarkerOptions().position(coords));
-                        marker.setTag(photoId);
+                        marker.setTag(photo.getId());
                     }
 
                     int width = getResources().getDisplayMetrics().widthPixels;

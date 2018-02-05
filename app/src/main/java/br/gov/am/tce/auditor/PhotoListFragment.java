@@ -20,17 +20,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -38,7 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.widget.CompoundButton.*;
+import static android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * Created by adrnm on 25/10/2017.
@@ -50,7 +46,6 @@ public class PhotoListFragment extends Fragment {
 
     private RecyclerView mPhotoRecyclerView;
     private PhotoAdapter mAdapter;
-    private List<String> mPhotoMapList = new ArrayList<>();
     private List<Photo> mPhotoList = new ArrayList<>();
 
     // database and storage server reference variables
@@ -118,8 +113,8 @@ public class PhotoListFragment extends Fragment {
                 startActivity(intent);
                 return true;
             case R.id.map_photo:
-                if(mPhotoMapList.size() != 0) {
-                    Intent mapIntent = MapsActivity.newIntent(getActivity(), mPhotoMapList);
+                if(mPhotoList.size() != 0) {
+                    Intent mapIntent = MapsActivity.newIntent(getActivity(), mPhotoList);
                     startActivity(mapIntent);
                     return true;
                 }
@@ -133,11 +128,7 @@ public class PhotoListFragment extends Fragment {
     }
 
     private void uploadPhotos() {
-        // check if there is already uploaded photos
-
-        // iterate over mPhotoMapList
         for (Photo photo: mPhotoList) {
-            // upload each photo and register it on RTD
             File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
             final Uri uri = FileProvider.getUriForFile(getActivity(),
                     "br.gov.am.tce.auditor.fileprovider", mPhotoFile);
@@ -150,49 +141,20 @@ public class PhotoListFragment extends Fragment {
                         StorageReference storageReference = FirebaseStorage.getInstance()
                                 .getReference().child(key)
                                 .child(uri.getLastPathSegment());
-                        storageReference.putFile(uri).addOnCompleteListener(MainActivity.this,
-                                new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                        if(task.isSuccessful()) {
-                                            Photo photo = new Photo()
-                                        }
-                                    }
-                                })
+                        storageReference.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                }
+
+                            }
+                        });
                     }
                     else {
                         Log.w(TAG, "Unable to write to database", databaseError.toException());
                     }
                 }
             });
-
-/*
-            mStorageReference.child(MESSAGES)putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            // Getting image name from EditText and store into string variable.
-                            String TempImageName = photo.getTitle();
-
-                            @SuppressWarnings("VisibleForTests")
-                            ImageUploadInfo imageUploadInfo = new ImageUploadInfo(TempImageName, taskSnapshot.getDownloadUrl().toString());
-
-                            // Getting image upload ID.
-                            String ImageUploadId = mDatabaseReference.push().getKey();
-
-                            // Adding image upload id s child element into databaseReference.
-                            mDatabaseReference.child(ImageUploadId).setValue(imageUploadInfo);
-                        }
-                    })
-                    // If something goes wrong .
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            Toast.makeText(getActivity(), "SOMETHING GOES WRONG", Toast.LENGTH_LONG).show();
-                        }
-                    });
-*/
         }
     }
 
@@ -247,15 +209,12 @@ public class PhotoListFragment extends Fragment {
         public void bindPhotoItem(final Photo photo) {
             mPhoto = photo;
 
-            // remove mPhotoMapList variable after update Photo class with parcelable or serializable interface
             mPhotoCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b) {
-                        mPhotoMapList.add(mPhoto.getId().toString());
                         mPhotoList.add(mPhoto);
                     } else {
-                        mPhotoMapList.remove(mPhoto.getId().toString());
                         mPhotoList.remove(mPhoto);
                     }
                 }

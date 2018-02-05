@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -42,7 +41,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.File;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -53,24 +51,18 @@ import java.util.UUID;
 
 public class PhotoActivity extends AppCompatActivity {
     private static final String TAG = "PhotoActivity";
-
     private static final String EXTRA_PHOTO_ID = "br.gov.am.tce.auditor.photo_id";
     private static final int REQUEST_PHOTO = 0;
     private static final int REQUEST_CHECK_SETTINGS = 1;
-
-
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
-
     private Photo mPhoto;
     private File mPhotoFile;
-
     private EditText mTitleField;
     private ImageButton mCameraButton;
     private ImageView mPhotoView;
-
     private final Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
     public static Intent newIntent(Context packageContext, UUID photoId) {

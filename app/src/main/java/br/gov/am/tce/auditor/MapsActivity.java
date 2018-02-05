@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -14,18 +14,17 @@ import java.util.List;
 
 public class MapsActivity extends SingleFragmentActivity {
 
-    private static final String EXTRA_PHOTO_IDS = "br.gov.am.tce.auditor.photo_ids";
+    private static final String EXTRA_PHOTO_LIST = "br.gov.am.tce.auditor.selectedPhotos";
 
-    public static Intent newIntent(Context packageContext, List<String> uuidList) {
+    public static Intent newIntent(Context packageContext, List<Photo> photoList) {
         Intent intent = new Intent(packageContext, MapsActivity.class);
-        intent.putStringArrayListExtra(EXTRA_PHOTO_IDS, (ArrayList<String>) uuidList);
-
+        intent.putExtra(EXTRA_PHOTO_LIST, (Serializable) photoList);
         return intent;
     }
 
     @Override
     protected Fragment createFragment() {
-        ArrayList<String> uuidArrayList = getIntent().getStringArrayListExtra(EXTRA_PHOTO_IDS);
-        return new MapsFragment().newInstance(uuidArrayList);
+        List<Photo> photoList = (List<Photo>) getIntent().getSerializableExtra(EXTRA_PHOTO_LIST);
+        return new MapsFragment().newInstance(photoList);
     }
 }
