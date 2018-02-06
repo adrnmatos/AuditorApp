@@ -238,7 +238,7 @@ public class PhotoActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_PHOTO) {
             Uri uri = FileProvider.getUriForFile(this,
-                    "br.gov.am.tce.auditor.fileprovider",
+                    "br.gov.am.tce.auditor.fileProvider",
                     mPhotoFile);
 
             revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
