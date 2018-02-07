@@ -200,7 +200,6 @@ public class PhotoListFragment extends Fragment {
 
         public PhotoHolder(View itemView) {
             super(itemView);
-
             mPhotoImageView = itemView.findViewById(R.id.photo_image_view);
             mPhotoCheckBox = itemView.findViewById(R.id.photo_checkbox);
             itemView.setOnClickListener(this);

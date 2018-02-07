@@ -2,7 +2,6 @@ package br.gov.am.tce.auditor;
 
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -11,24 +10,24 @@ import java.util.UUID;
 
 public class Photo implements Serializable {
 
-    private UUID mId;
+    private String mId;
     private String mTitle;
     private double mLatitude;
     private double mLongitude;
 
-    public Photo(UUID id) {
+    public Photo(String id) {
         mId = id;
     }
 
     public Photo() {
-        this(UUID.randomUUID());
+        this(UUID.randomUUID().toString());
     }
 
-    public UUID getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(UUID mId) {
+    public void setId(String mId) {
         this.mId = mId;
     }
 

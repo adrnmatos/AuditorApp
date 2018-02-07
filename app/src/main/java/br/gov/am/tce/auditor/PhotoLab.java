@@ -4,12 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import br.gov.am.tce.auditor.database.PhotoBaseHelper;
 import br.gov.am.tce.auditor.database.PhotoCursorWrapper;
@@ -43,23 +41,22 @@ public class PhotoLab {
     }
 
     public void updatePhoto(Photo photo) {
-        String uuidString = photo.getId().toString();
+        String id = photo.getId();
         ContentValues values = getContentValues(photo);
 
         mDatabase.update(PhotoTable.NAME, values,
                 PhotoTable.Cols.UUID + " = ?",
-                new String[] {uuidString});
+                new String[] {id});
     }
 
     public void deletePhoto(Photo photo) {
 
         File file = getPhotoFile(photo);
         boolean b = file.delete();
-        Toast.makeText(mContext, "OK, deletou", Toast.LENGTH_LONG).show();
 
-        String uuidString = photo.getId().toString();
+        String id = photo.getId();
         mDatabase.delete(PhotoTable.NAME, PhotoTable.Cols.UUID + " = ?",
-                new String[] {uuidString});
+                new String[] {id});
     }
 
     public List<Photo> getPhotos() {
@@ -76,14 +73,13 @@ public class PhotoLab {
         } finally {
             cursor.close();
         }
-
         return photos;
     }
 
-    public Photo getPhoto(UUID id) {
+    public Photo getPhoto(String id) {
         PhotoCursorWrapper cursor = queryPhotos(
                 PhotoTable.Cols.UUID + " = ?",
-                new String[] { id.toString() }
+                new String[] { id }
         );
 
         try {
@@ -119,7 +115,7 @@ public class PhotoLab {
     // key-value collection used when persisting data
     private static ContentValues getContentValues(Photo photo) {
         ContentValues values = new ContentValues();
-        values.put(PhotoTable.Cols.UUID, photo.getId().toString());
+        values.put(PhotoTable.Cols.UUID, photo.getId());
         values.put(PhotoTable.Cols.TITLE, photo.getTitle());
         values.put(PhotoTable.Cols.LATITUDE, String.valueOf(photo.getLatitude()));
         values.put(PhotoTable.Cols.LONGITUDE, String.valueOf(photo.getLongitude()));

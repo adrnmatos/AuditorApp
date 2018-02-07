@@ -42,7 +42,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -65,7 +64,7 @@ public class PhotoActivity extends AppCompatActivity {
     private ImageView mPhotoView;
     private final Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    public static Intent newIntent(Context packageContext, UUID photoId) {
+    public static Intent newIntent(Context packageContext, String photoId) {
         Intent intent = new Intent(packageContext, PhotoActivity.class);
         intent.putExtra(EXTRA_PHOTO_ID, photoId);
         return intent;
@@ -76,7 +75,7 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        UUID photoId = (UUID) getIntent().getSerializableExtra(EXTRA_PHOTO_ID);
+        String photoId = getIntent().getStringExtra(EXTRA_PHOTO_ID);
         mPhoto = PhotoLab.get(this).getPhoto(photoId);
         mPhotoFile = PhotoLab.get(this).getPhotoFile(mPhoto);
 
@@ -191,7 +190,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void takePhoto(View v) {
-        Uri uri = FileProvider.getUriForFile(this, "br.gov.am.tce.auditor.fileprovider", mPhotoFile);
+        Uri uri = FileProvider.getUriForFile(this, "br.gov.am.tce.auditor.fileProvider", mPhotoFile);
         captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
         List<ResolveInfo> cameraActivities = getPackageManager().queryIntentActivities(captureImageIntent, PackageManager.MATCH_DEFAULT_ONLY);

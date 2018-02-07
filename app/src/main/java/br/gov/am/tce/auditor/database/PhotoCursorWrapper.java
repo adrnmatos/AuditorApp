@@ -3,8 +3,6 @@ package br.gov.am.tce.auditor.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import java.util.UUID;
-
 import br.gov.am.tce.auditor.Photo;
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;
 
@@ -24,8 +22,7 @@ public class PhotoCursorWrapper extends CursorWrapper {
         Double latitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LATITUDE)));
         Double longitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LONGITUDE)));
 
-        Photo photo = new Photo(UUID.fromString(uuidString));
-
+        Photo photo = new Photo(uuidString);
         photo.setTitle(title);
         photo.setLatitude(latitude);
         photo.setLongitude(longitude);
