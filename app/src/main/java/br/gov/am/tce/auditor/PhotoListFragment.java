@@ -23,9 +23,12 @@ import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.widget.CompoundButton.OnCheckedChangeListener;
 
@@ -62,7 +66,37 @@ public class PhotoListFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference photoDBReference = mDatabaseReference.child("photos");
+        photoDBReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                collectPhotoObjects((Map<String, Object>) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mStorageReference = FirebaseStorage.getInstance().getReference();
+    }
+
+    private void collectPhotoObjects(Map<String, Object> users ) {
+        for(Map.Entry<String, Object> entry : users.entrySet()) {
+
+            Map photoObject = (Map) entry.getValue();
+            String photoId = entry.getKey();
+            String photoTitle = (String) photoObject.get("title");
+            double photoLat = ((Long) photoObject.get("lat")).doubleValue();
+            double photoLng = ((Long) photoObject.get("lng")).doubleValue();
+
+
+
+            Photo newPhoto = new Photo(photoId, photoTitle, photoLat, photoLng);
+
+
+        }
     }
 
     @Nullable

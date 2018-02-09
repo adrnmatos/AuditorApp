@@ -23,6 +23,13 @@ public class Photo implements Serializable {
         this(UUID.randomUUID().toString());
     }
 
+    public Photo(String id, String title, double lat, double lng) {
+        mId = id;
+        mTitle = title;
+        mLatitude = lat;
+        mLongitude = lng;
+    }
+
     public String getId() {
         return mId;
     }
