@@ -11,12 +11,18 @@
         android:id="@+id/map_photo"
         android:icon="@drawable/ic_show_map"
         android:title="@string/map_photo_list_menu"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="withText"/>
+
+    <item
+        android:id="@+id/check_new_photos_on_server"
+        android:icon="@drawable/ic_check_new_photos_on_server"
+        android:title="@string/check_server"
+        app:showAsAction="withText"/>
 
     <item
         android:id="@+id/upload_photo"
         android:icon="@drawable/ic_upload_photo"
         android:title="@string/upload_photo_list_menu"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="withText"/>
 
 </menu>

@@ -5,7 +5,8 @@
     <string name="remove_photo_menu">Remove Foto</string>
     <string name="photo_title_label">Titulo</string>
     <string name="photo_title_hint">Entre com um titulo para a foto.</string>
-    <string name="map_photo_list_menu">Mostrar no Mapa</string>
-    <string name="upload_photo_list_menu">Upload Foto</string>
+    <string name="map_photo_list_menu">Mapa</string>
+    <string name="upload_photo_list_menu">Upload</string>
     <string name="sign_in">Sign In</string>
+    <string name="check_server">Download</string>
 </resources>
