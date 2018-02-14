@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Created by adrnm on 24/10/2017.
  */
-
+// random comment
 public class Photo implements Serializable {
 
     private String mId;
