@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ import static android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class PhotoListFragment extends Fragment {
     private static final String TAG = "PhotoListFragment";
-    private static final String MESSAGES = "Photo_Messages";
+    private static final String PHOTOS = "photos";
 
     private RecyclerView mPhotoRecyclerView;
     private PhotoAdapter mAdapter;
@@ -99,13 +100,125 @@ public class PhotoListFragment extends Fragment {
         }
     }
 
-    private void CheckNewPhotosOnServer() {
-        DatabaseReference photoDBReference = mDatabaseReference.child("photos");
-        photoDBReference.addValueEventListener(new ValueEventListener() {
+    // **********************   ADAPTER CLASS   ************************//
+    private class PhotoAdapter extends RecyclerView.Adapter<PhotoHolder> {
+        List<Photo> mPhotos;
+
+        private PhotoAdapter(List<Photo> photos) {
+            mPhotos = photos;
+        }
+
+        @Override
+        public PhotoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View v = inflater.inflate(R.layout.list_item_photo, parent, false);
+            return new PhotoHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(PhotoHolder holder, int position) {
+            Photo photo = mPhotos.get(position);
+            holder.bindPhotoItem(photo);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mPhotos.size();
+        }
+
+        private void setPhotos(List<Photo> photos) {
+            mPhotos = photos;
+        }
+    }
+
+    // ****************   PHOTO HOLDER CLASS   ********************************************* //
+    private class PhotoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ImageView mPhotoImageView;
+        private CheckBox mPhotoCheckBox;
+        private Photo mPhoto;
+
+        private PhotoHolder(View itemView) {
+            super(itemView);
+            mPhotoImageView = itemView.findViewById(R.id.photo_image_view);
+            mPhotoCheckBox = itemView.findViewById(R.id.photo_checkbox);
+            itemView.setOnClickListener(this);
+        }
+
+        private void bindPhotoItem(final Photo photo) {
+            mPhoto = photo;
+            mPhotoCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b) {
+                        mSelectedPhotosList.add(mPhoto);
+                    } else {
+                        mSelectedPhotosList.remove(mPhoto);
+                    }
+                }
+            });
+
+            File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
+            if(mPhotoFile == null || !mPhotoFile.exists()) {
+                mPhotoImageView.setImageDrawable(null);
+            } else {
+                Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+                mPhotoImageView.setImageBitmap(bitmap);
+            }
+        }
+
+        // edit photo
+        @Override
+        public void onClick(View view) {
+            Intent intent = PhotoActivity.newIntent(getActivity(), mPhoto.getId());
+            startActivity(intent);
+        }
+    }
+
+    // ************************  MENU METHODS  **********************//
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_photo_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.new_photo:
+                Photo photo = new Photo();
+                PhotoLab.get(getActivity()).addPhoto(photo);
+                Intent intent = PhotoActivity.newIntent(getActivity(), photo.getId());
+                startActivity(intent);
+                return true;
+            case R.id.map_photo:
+                if(mSelectedPhotosList.size() != 0) {
+                    Intent mapIntent = MapsActivity.newIntent(getActivity(), mSelectedPhotosList);
+                    startActivity(mapIntent);
+                    return true;
+                }
+            case R.id.check_new_photos_on_server:
+                DownloadPhotos();
+                return true;
+            case R.id.upload_photo:
+                if(mSelectedPhotosList.size() != 0) {
+                    uploadPhotos();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void DownloadPhotos() {
+        DatabaseReference photoDBReference = mDatabaseReference.child(PHOTOS);
+        //TODO: it is not recommended to attach a listener to root of the DB tree.
+        photoDBReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                getPhotosFromServer((Map<String, Object>) dataSnapshot.getValue());
-                updateUI();
+                if(dataSnapshot != null) {
+                    getPhotosFromServer((Map<String, Object>) dataSnapshot.getValue());
+                    updateUI();
+                }
             }
 
             @Override
@@ -145,152 +258,49 @@ public class PhotoListFragment extends Fragment {
     }
 
     private void uploadPhotos() {
-        for (Photo photo: mSelectedPhotosList) {
-            File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
-            DatabaseReference photoDBReference = mDatabaseReference.child("photos").child(photo.getId());
-            if(photoDBReference.)
-
-
-
-
-            final Uri uri = FileProvider.getUriForFile(getActivity(),
-                    "br.gov.am.tce.auditor.fileprovider", mPhotoFile);
-
-            mDatabaseReference.child(MESSAGES).push().setValue(photo, new DatabaseReference.CompletionListener() {
+        for (final Photo photo: mSelectedPhotosList) {
+            final DatabaseReference photoDBReference = mDatabaseReference.child(PHOTOS).child(photo.getId());
+            photoDBReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if(databaseError == null) {
-                        String key = databaseReference.getKey();
-                        StorageReference storageReference = FirebaseStorage.getInstance()
-                                .getReference().child(key)
-                                .child(uri.getLastPathSegment());
-                        storageReference.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                }
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getValue() == null) {
+                        String key = photoDBReference.push().getKey();
 
-                            }
-                        });
+                        Map<String, Object> photoValues = new HashMap<>();
+                        photoValues.put("title", photo.getTitle());
+                        photoValues.put("lat", photo.getLatitude());
+                        photoValues.put("lng", photo.getLongitude());
+                        photoDBReference.setValue(photoValues);
+                        putImageInStorage(photo, key);
                     }
-                    else {
-                        Log.w(TAG, "Unable to write to database", databaseError.toException());
-                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
                 }
             });
         }
+        updateUI();
     }
 
-    // ************************  MENU METHODS  **********************//
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_photo_list, menu);
-    }
+    private void putImageInStorage(Photo photo, String key) {
+        File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
+        Uri uri = FileProvider.getUriForFile(getActivity(),"br.gov.am.tce.auditor.fileProvider", mPhotoFile);
+        StorageReference photoStorageReference = mStorageReference.child(photo.getId());
+        photoStorageReference.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.new_photo:
-                Photo photo = new Photo();
-                PhotoLab.get(getActivity()).addPhoto(photo);
-                Intent intent = PhotoActivity.newIntent(getActivity(), photo.getId());
-                startActivity(intent);
-                return true;
-            case R.id.map_photo:
-                if(mSelectedPhotosList.size() != 0) {
-                    Intent mapIntent = MapsActivity.newIntent(getActivity(), mSelectedPhotosList);
-                    startActivity(mapIntent);
-                    return true;
+                } else {
+                    //TODO: remove entry if error
+                    Log.e(TAG, "Upload was not successful" + task.getException());
                 }
-            case R.id.check_new_photos_on_server:
-                CheckNewPhotosOnServer();
-                return true;
-            case R.id.upload_photo:
-                if(mSelectedPhotosList.size() != 0) {
-                    uploadPhotos();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-    // ****************   ADAPTER CLASS   ******************************//
-    private class PhotoAdapter extends RecyclerView.Adapter<PhotoHolder> {
-
-        List<Photo> mPhotos;
-
-        public PhotoAdapter(List<Photo> photos) {
-            mPhotos = photos;
-        }
-
-        @Override
-        public PhotoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View v = inflater.inflate(R.layout.list_item_photo, parent, false);
-            return new PhotoHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(PhotoHolder holder, int position) {
-            Photo photo = mPhotos.get(position);
-            holder.bindPhotoItem(photo);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mPhotos.size();
-        }
-
-        public void setPhotos(List<Photo> photos) {
-            mPhotos = photos;
-        }
-    }
-
-    // ****************   PHOTO HOLDER CLASS   ********************************************* //
-    private class PhotoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView mPhotoImageView;
-        private CheckBox mPhotoCheckBox;
-        private Photo mPhoto;
-
-        public PhotoHolder(View itemView) {
-            super(itemView);
-            mPhotoImageView = itemView.findViewById(R.id.photo_image_view);
-            mPhotoCheckBox = itemView.findViewById(R.id.photo_checkbox);
-            itemView.setOnClickListener(this);
-        }
-
-        public void bindPhotoItem(final Photo photo) {
-            mPhoto = photo;
-
-            mPhotoCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b) {
-                        mSelectedPhotosList.add(mPhoto);
-                    } else {
-                        mSelectedPhotosList.remove(mPhoto);
-                    }
-                }
-            });
-
-            File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
-            if(mPhotoFile == null || !mPhotoFile.exists()) {
-                mPhotoImageView.setImageDrawable(null);
-            } else {
-                Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
-                mPhotoImageView.setImageBitmap(bitmap);
             }
-        }
-
-        // edit photo
-        @Override
-        public void onClick(View view) {
-            Intent intent = PhotoActivity.newIntent(getActivity(), mPhoto.getId());
-            startActivity(intent);
-        }
+        });
+        //TODO: How now to access the File on FileProvider? FileProvider
+        photo.setId(key);
     }
 
 }
