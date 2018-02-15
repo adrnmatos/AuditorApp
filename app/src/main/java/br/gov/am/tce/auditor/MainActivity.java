@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ERROR = 0;
     private static final int PERMISSION_REQUEST_LOCATION = 1;
-    // Firebase instance variables
+
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 

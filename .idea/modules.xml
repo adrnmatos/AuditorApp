@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Auditor.iml" filepath="$PROJECT_DIR$/Auditor.iml" />
       <module fileurl="file://C:\Users\adrnm\AndroidStudioProjects\AuditorApp\Auditor.iml" filepath="C:\Users\adrnm\AndroidStudioProjects\AuditorApp\Auditor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AuditorApp.iml" filepath="$PROJECT_DIR$/AuditorApp.iml" />
+      <module fileurl="file://C:\Users\Adriano\AndroidStudioProjects\Auditor\AuditorApp.iml" filepath="C:\Users\Adriano\AndroidStudioProjects\Auditor\AuditorApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
