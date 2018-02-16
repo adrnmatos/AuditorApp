@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -196,13 +197,13 @@ public class PhotoListFragment extends Fragment {
                     startActivity(mapIntent);
                     return true;
                 }
-            case R.id.check_new_photos_on_server:
-                DownloadPhotos();
-                return true;
             case R.id.upload_photo:
                 if(mSelectedPhotosList.size() != 0) {
                     uploadPhotos();
                 }
+                return true;
+            case R.id.check_new_photos_on_server:
+                DownloadPhotos();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -211,50 +212,48 @@ public class PhotoListFragment extends Fragment {
 
     private void DownloadPhotos() {
         DatabaseReference photoDBReference = mDatabaseReference.child(PHOTOS);
-        //TODO: it is not recommended to attach a listener to root of the DB tree.
         photoDBReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot != null) {
-                    getPhotosFromServer((Map<String, Object>) dataSnapshot.getValue());
-                    updateUI();
+                    if(dataSnapshot.getChildrenCount() != 0) {
+                        for(DataSnapshot child : dataSnapshot.getChildren()) {
+                            String itemId = child.getKey();
+                            PhotoLab photoLab = PhotoLab.get(getActivity());
+                            if(photoLab.getPhoto(itemId) == null) {
+                                Photo newPhoto = child.getValue(Photo.class);
+                                getImageFromServer(newPhoto);
+                            }
+                        }
+                    }
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "Failed to read database: " + databaseError.toException());
+                Log.e(TAG, "Failed on reading database: " + databaseError.toException());
             }
         });
     }
 
-    private void getPhotosFromServer(Map<String, Object> serverPhotos ) {
-        for(Map.Entry<String, Object> entry : serverPhotos.entrySet()) {
-            String photoId = entry.getKey();
-
-            final PhotoLab photoLab = PhotoLab.get(getActivity());
-            if(photoLab.getPhoto(photoId) == null) {
-                Map serverPhotoObject = (Map) entry.getValue();
-                String photoTitle = (String) serverPhotoObject.get("title");
-                double photoLat = ((Long) serverPhotoObject.get("lat")).doubleValue();
-                double photoLng = ((Long) serverPhotoObject.get("lng")).doubleValue();
-                final Photo newPhoto = new Photo(photoId, photoTitle, photoLat, photoLng);
-
-                StorageReference photoStorageReference = mStorageReference.child(photoId);
-                File photoFile = photoLab.getPhotoFile(newPhoto);
-                photoStorageReference.getFile(photoFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        photoLab.addPhoto(newPhoto);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Failed on downloading file");
-                    }
-                });
-            }
-        }
+    private void getImageFromServer(final Photo photo) {
+        StorageReference photoStorageReference = mStorageReference.child(photo.getId());
+        final PhotoLab photoLab = PhotoLab.get(getActivity());
+        File photoFile = photoLab.getPhotoFile(photo);
+        photoStorageReference.getFile(photoFile)
+            .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    photoLab.addPhoto(photo);
+                    updateUI();
+                    Log.d(TAG, "Successfully downloaded photo: " + photo.getId());
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "Failed on downloading file");
+                }
+            });
     }
 
     private void uploadPhotos() {
@@ -264,27 +263,20 @@ public class PhotoListFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue() == null) {
-                        String key = photoDBReference.push().getKey();
-
-                        Map<String, Object> photoValues = new HashMap<>();
-                        photoValues.put("title", photo.getTitle());
-                        photoValues.put("lat", photo.getLatitude());
-                        photoValues.put("lng", photo.getLongitude());
-                        photoDBReference.setValue(photoValues);
-                        putImageInStorage(photo, key);
+                        photoDBReference.setValue(photo);
+                        putImageInStorage(photoDBReference, photo);
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Log.e(TAG, "Failed on writing to database: " + databaseError.toException());
                 }
             });
         }
         updateUI();
     }
 
-    private void putImageInStorage(Photo photo, String key) {
+    private void putImageInStorage(final DatabaseReference photoDBReference, final Photo photo) {
         File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
         Uri uri = FileProvider.getUriForFile(getActivity(),"br.gov.am.tce.auditor.fileProvider", mPhotoFile);
         StorageReference photoStorageReference = mStorageReference.child(photo.getId());
@@ -292,15 +284,13 @@ public class PhotoListFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful()) {
-
+                    Log.d(TAG, "Successfully uploaded photo: " + photo.getId());
                 } else {
-                    //TODO: remove entry if error
-                    Log.e(TAG, "Upload was not successful" + task.getException());
+                    photoDBReference.removeValue();
+                    Log.e(TAG, "Failed on uploading file" + task.getException());
                 }
             }
         });
-        //TODO: How now to access the File on FileProvider? FileProvider
-        photo.setId(key);
     }
 
 }

@@ -23,11 +23,11 @@ public class Photo implements Serializable {
         this(UUID.randomUUID().toString());
     }
 
-    public Photo(String id, String title, double lat, double lng) {
+    public Photo(String id, String title, double latitude, double longitude) {
         mId = id;
         mTitle = title;
-        mLatitude = lat;
-        mLongitude = lng;
+        mLatitude = latitude;
+        mLongitude = longitude;
     }
 
     public String getId() {
