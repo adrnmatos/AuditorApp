@@ -21,11 +21,13 @@ public class PhotoCursorWrapper extends CursorWrapper {
         String title = getString(getColumnIndex(PhotoTable.Cols.TITLE));
         Double latitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LATITUDE)));
         Double longitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LONGITUDE)));
+        long time = Long.valueOf(getString(getColumnIndex(PhotoTable.Cols.TIME)));
 
         Photo photo = new Photo(uuidString);
         photo.setTitle(title);
         photo.setLatitude(latitude);
         photo.setLongitude(longitude);
+        photo.setTime(time);
 
         return photo;
     }

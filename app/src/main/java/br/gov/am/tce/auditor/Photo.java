@@ -14,6 +14,7 @@ public class Photo implements Serializable {
     private String mTitle;
     private double mLatitude;
     private double mLongitude;
+    private long mTime;
 
     public Photo(String id) {
         mId = id;
@@ -23,11 +24,12 @@ public class Photo implements Serializable {
         this(UUID.randomUUID().toString());
     }
 
-    public Photo(String id, String title, double latitude, double longitude) {
+    public Photo(String id, String title, double latitude, double longitude, long time) {
         mId = id;
         mTitle = title;
         mLatitude = latitude;
         mLongitude = longitude;
+        mTime = time;
     }
 
     public String getId() {
@@ -60,6 +62,14 @@ public class Photo implements Serializable {
 
     public void setLongitude(double longitude) {
         mLongitude = longitude;
+    }
+
+    public long getTime() {
+        return mTime;
+    }
+
+    public void setTime(long time) {
+        this.mTime = time;
     }
 
     public String getPhotoFilename() {

@@ -25,7 +25,8 @@ public class PhotoBaseHelper extends SQLiteOpenHelper {
             PhotoTable.Cols.UUID + ", " +
             PhotoTable.Cols.TITLE + ", " +
             PhotoTable.Cols.LATITUDE + ", " +
-            PhotoTable.Cols.LONGITUDE +
+            PhotoTable.Cols.LONGITUDE + ", " +
+            PhotoTable.Cols.TIME +
         ")"
         );
     }

@@ -119,6 +119,7 @@ public class PhotoLab {
         values.put(PhotoTable.Cols.TITLE, photo.getTitle());
         values.put(PhotoTable.Cols.LATITUDE, String.valueOf(photo.getLatitude()));
         values.put(PhotoTable.Cols.LONGITUDE, String.valueOf(photo.getLongitude()));
+        values.put(PhotoTable.Cols.TIME, String.valueOf(photo.getTime()));
 
         return values;
     }

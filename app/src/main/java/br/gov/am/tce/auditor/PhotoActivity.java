@@ -194,14 +194,13 @@ public class PhotoActivity extends AppCompatActivity {
         captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
         List<ResolveInfo> cameraActivities = getPackageManager().queryIntentActivities(captureImageIntent, PackageManager.MATCH_DEFAULT_ONLY);
-
         for(ResolveInfo activity : cameraActivities) {
             grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         }
 
-        /* TODO: To check what if cancel photo since assigning latitude and longitude before it is taken */
         mPhoto.setLatitude(mLastLocation.getLatitude());
         mPhoto.setLongitude(mLastLocation.getLongitude());
+        mPhoto.setTime(mLastLocation.getTime());
 
         startActivityForResult(captureImageIntent, REQUEST_PHOTO);
     }

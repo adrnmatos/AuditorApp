@@ -13,6 +13,7 @@ public class PhotoDbSchema {
             public static final String TITLE = "title";
             public static final String LATITUDE = "latitude";
             public static final String LONGITUDE = "longitude";
+            public static final String TIME = "time";
         }
     }
 }
