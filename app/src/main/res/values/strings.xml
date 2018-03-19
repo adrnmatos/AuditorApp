@@ -4,9 +4,14 @@
     <string name="new_photo_list_menu">Nova Foto</string>
     <string name="remove_photo_menu">Remove Foto</string>
     <string name="photo_title_label">Titulo</string>
-    <string name="photo_title_hint">Entre com um titulo para a foto.</string>
+    <string name="photo_title_hint">Entre com um titulo para a foto</string>
     <string name="map_photo_list_menu">Mapa</string>
     <string name="upload_photo_list_menu">Upload</string>
     <string name="sign_in">Sign In</string>
     <string name="check_server">Download</string>
+    <string name="search">Procurar</string>
+    <string name="exercicio">Exercício</string>
+    <string name="municipio">Município</string>
+    <string name="jurisdicionado">Jurisdicionado</string>
+    <string name="buscar_btn">Buscar Contratos</string>
 </resources>

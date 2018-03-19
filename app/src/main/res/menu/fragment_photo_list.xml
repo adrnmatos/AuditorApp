@@ -25,4 +25,9 @@
         android:title="@string/check_server"
         app:showAsAction="withText"/>
 
+    <item
+        android:id="@+id/search"
+        android:title="@string/search"
+        app:showAsAction="withText"/>
+
 </menu>

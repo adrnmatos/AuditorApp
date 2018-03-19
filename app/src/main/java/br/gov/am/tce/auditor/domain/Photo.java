@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor;
+package br.gov.am.tce.auditor.domain;
 
 
 import java.io.Serializable;

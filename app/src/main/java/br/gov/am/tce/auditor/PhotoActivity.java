@@ -43,6 +43,10 @@ import com.google.android.gms.tasks.Task;
 import java.io.File;
 import java.util.List;
 
+import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.helpers.PhotoLab;
+import br.gov.am.tce.auditor.helpers.PictureUtils;
+
 
 /**
  * Created by adrnm on 26/10/2017.
@@ -59,7 +63,7 @@ public class PhotoActivity extends AppCompatActivity {
     private Location mLastLocation;
     private Photo mPhoto;
     private File mPhotoFile;
-    private EditText mTitleField;
+    private EditText mPhotoNote;
     private ImageButton mCameraButton;
     private ImageView mPhotoView;
     private final Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -102,16 +106,16 @@ public class PhotoActivity extends AppCompatActivity {
 
         configureLocationRequest();
 
-        mPhotoView = findViewById(R.id.photo_view);
+        mPhotoView = findViewById(R.id.photo_photo_view);
         updatePhotoView();
 
         mCameraButton = findViewById(R.id.photo_camera);
         boolean canTakePhoto = mPhotoFile != null && captureImageIntent.resolveActivity(getPackageManager()) != null;
         mCameraButton.setEnabled(canTakePhoto);
 
-        mTitleField = findViewById(R.id.photo_note);
-        mTitleField.setText(mPhoto.getTitle());
-        mTitleField.addTextChangedListener(new TextWatcher() {
+        mPhotoNote = findViewById(R.id.photo_note);
+        mPhotoNote.setText(mPhoto.getTitle());
+        mPhotoNote.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 

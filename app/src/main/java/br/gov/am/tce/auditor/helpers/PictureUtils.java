@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor;
+package br.gov.am.tce.auditor.helpers;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

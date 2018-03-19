@@ -39,6 +39,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.helpers.PhotoLab;
+import br.gov.am.tce.auditor.helpers.PictureUtils;
+
 import static android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
@@ -201,6 +205,10 @@ public class PhotoListFragment extends Fragment {
                 return true;
             case R.id.check_new_photos_on_server:
                 DownloadPhotos();
+                return true;
+            case R.id.search:
+                Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(searchIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

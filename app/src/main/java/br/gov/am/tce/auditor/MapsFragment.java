@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.gov.am.tce.auditor.domain.Photo;
+
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private static final String ARG_PHOTOS = "photo_list";
 

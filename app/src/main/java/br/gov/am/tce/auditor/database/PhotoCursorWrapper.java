@@ -3,7 +3,7 @@ package br.gov.am.tce.auditor.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import br.gov.am.tce.auditor.Photo;
+import br.gov.am.tce.auditor.domain.Photo;
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;
 
 /**

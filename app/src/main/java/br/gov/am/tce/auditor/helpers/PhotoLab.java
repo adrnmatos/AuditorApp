@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor;
+package br.gov.am.tce.auditor.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.gov.am.tce.auditor.domain.Photo;
 import br.gov.am.tce.auditor.database.PhotoBaseHelper;
 import br.gov.am.tce.auditor.database.PhotoCursorWrapper;
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;

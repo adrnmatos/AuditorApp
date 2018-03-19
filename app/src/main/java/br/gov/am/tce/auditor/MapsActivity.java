@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import java.io.Serializable;
 import java.util.List;
 
+import br.gov.am.tce.auditor.domain.Photo;
+
 
 /**
  * Created by adrnm on 16/10/2017.

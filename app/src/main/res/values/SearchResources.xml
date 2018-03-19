@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="exercicios_array">
+        <item>2000</item>
+        <item>2001</item>
+        <item>2002</item>
+        <item>2003</item>
+        <item>2004</item>
+        <item>2005</item>
+        <item>2006</item>
+        <item>2007</item>
+        <item>2008</item>
+        <item>2009</item>
+        <item>2010</item>
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+        <item>2025</item>
+    </string-array>
+
+    <string-array name="municipios_array">
+        <item>Alvaraes</item>
+        <item>Amatura</item>
+        <item>Anama</item>
+        <item>Anori</item>
+        <item>Apui</item>
+        <item>Atalaia do Norte</item>
+        <item>Autazes</item>
+        <item>Barcelos</item>
+        <item>Barreirinha</item>
+        <item>Benjamin Constant</item>
+        <item>Beruri</item>
+        <item>Boa Vista do Ramos</item>
+        <item>Boca do Acre</item>
+        <item>Borba</item>
+        <item>Caapiranga</item>
+        <item>Canutama</item>
+        <item>Carauari</item>
+        <item>Careiro</item>
+        <item>Careiro da Varzea</item>
+        <item>Coari</item>
+        <item>Codajas</item>
+        <item>Eirunepe</item>
+        <item>Envira</item>
+        <item>Fonte Boa</item>
+        <item>Guajara</item>
+        <item>Humaita</item>
+        <item>Ipixuna</item>
+        <item>Iranduba</item>
+        <item>Itacoatiara</item>
+        <item>Itamarati</item>
+        <item>Itapiranga</item>
+        <item>Japura</item>
+        <item>Jurua</item>
+        <item>Jutai</item>
+        <item>Labrea</item>
+        <item>Manacapuru</item>
+        <item>Manaquiri</item>
+        <item>Manaus</item>
+        <item>Manicore</item>
+        <item>Maraa</item>
+        <item>Maues</item>
+        <item>Nhamunda</item>
+        <item>Nova Olinda do Norte</item>
+        <item>Novo Airao</item>
+        <item>Novo Aripuana</item>
+        <item>Parintins</item>
+        <item>Pauini</item>
+        <item>Presidente Figueiredo</item>
+        <item>Rio Preto da Eva</item>
+        <item>Santa Isabel do Rio Negro</item>
+        <item>Santo Antonio do Ica</item>
+        <item>Sao Gabriel da Cachoeira</item>
+        <item>Sao Paulo de Olivenca</item>
+        <item>Sao Sebastiao do Uatuma</item>
+        <item>Silves</item>
+        <item>Tabatinga</item>
+        <item>Tapaua</item>
+        <item>Tefe</item>
+        <item>Tonantins</item>
+        <item>Uarini</item>
+        <item>Urucara</item>
+        <item>Uricurituba</item>
+    </string-array>
+
+</resources>

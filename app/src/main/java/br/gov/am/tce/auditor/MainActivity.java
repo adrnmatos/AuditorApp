@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
             }
         } else {
-            // Initialize Firebase Auth
             mFirebaseAuth = FirebaseAuth.getInstance();
             mFirebaseUser = mFirebaseAuth.getCurrentUser();
             if (mFirebaseUser == null) {
@@ -72,11 +71,9 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERMISSION_REQUEST_LOCATION:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Initialize Firebase Auth
                     mFirebaseAuth = FirebaseAuth.getInstance();
                     mFirebaseUser = mFirebaseAuth.getCurrentUser();
                     if (mFirebaseUser == null) {
-                        // Not signed in, launch the Sign In activity
                         startActivity(new Intent(this, SignInActivity.class));
                         finish();
                         return;

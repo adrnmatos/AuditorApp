@@ -3,6 +3,7 @@
           package="br.gov.am.tce.auditor">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-feature android:name="android.hardware.location.gps"/>
 
@@ -36,6 +37,8 @@
 
         <activity android:name=".MapsActivity"
             android:parentActivityName=".PhotoListActivity"/>
+
+        <activity android:name=".SearchActivity"/>
 
         <provider
             android:authorities="br.gov.am.tce.auditor.fileProvider"
