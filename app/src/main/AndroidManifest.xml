@@ -40,6 +40,8 @@
 
         <activity android:name=".SearchActivity"/>
 
+        <activity android:name=".ContractPagerActivity"/>
+
         <provider
             android:authorities="br.gov.am.tce.auditor.fileProvider"
             android:name="android.support.v4.content.FileProvider"

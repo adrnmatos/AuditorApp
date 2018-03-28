@@ -95,8 +95,6 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new FetchItemsTask().execute(yearStr, countyStr, ownerStr);
-                Toast.makeText(SearchActivity.this, countyStr + " " + yearStr, Toast.LENGTH_LONG)
-                        .show();
             }
         });
 
@@ -115,10 +113,8 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Contract> contracts) {
             mContracts = contracts;
-            Intent intent = new Intent();
-            // create an intent to contractActivity and pass the list as parameter
-            // create as adapter and set the list as parameter
-            // like ViewPager
+            Intent intent = ContractPagerActivity.newIntent(SearchActivity.this, contracts);
+            startActivity(intent);
         }
     }
 }
