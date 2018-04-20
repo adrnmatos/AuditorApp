@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/mdGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.052083332" />
+
+    <TextView
+        android:id="@+id/mdLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/id"
+        app:layout_constraintStart_toStartOf="@+id/mdGuide1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mdLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/numero"
+        app:layout_constraintStart_toStartOf="@+id/mdGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/mdLabel1" />
+
+    <TextView
+        android:id="@+id/mdLabel3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/data_inicio"
+        app:layout_constraintStart_toStartOf="@+id/mdGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/mdLabel2" />
+
+    <TextView
+        android:id="@+id/mdLabel4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/data_fim"
+        app:layout_constraintStart_toStartOf="@+id/mdGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/mdLabel3" />
+
+    <TextView
+        android:id="@+id/mdLabel5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/contrato_id"
+        app:layout_constraintStart_toStartOf="@+id/mdGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/mdLabel4" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.58" />
+
+    <TextView
+        android:id="@+id/MDId_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/MDNumero_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/MDId_TV" />
+
+    <TextView
+        android:id="@+id/MDDataInicio_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/MDNumero_TV" />
+
+    <TextView
+        android:id="@+id/MDDataFim_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/MDDataInicio_TV" />
+
+    <TextView
+        android:id="@+id/MDCTId_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/MDDataFim_TV" />
+
+</android.support.constraint.ConstraintLayout>
