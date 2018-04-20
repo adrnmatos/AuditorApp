@@ -19,7 +19,7 @@ public class BemPublico implements Parcelable {
     private String nome;
     private String jurisdicionado;
     private String endereco;
-    private List<Contract> contratoLista = new ArrayList<>();
+    private List<Contrato> contratoLista = new ArrayList<>();
 
     public BemPublico() {}
 
@@ -32,7 +32,7 @@ public class BemPublico implements Parcelable {
         nome = in.readString();
         jurisdicionado = in.readString();
         endereco = in.readString();
-        contratoLista = in.readArrayList(Contract.class.getClassLoader());
+        contratoLista = in.readArrayList(Contrato.class.getClassLoader());
     }
 
     @Override
@@ -127,11 +127,11 @@ public class BemPublico implements Parcelable {
         this.endereco = endereco;
     }
 
-    public List<Contract> getContratos() {
+    public List<Contrato> getContratos() {
         return contratoLista;
     }
 
-    public void setContratos(List<Contract> contratoLista) {
+    public void setContratos(List<Contrato> contratoLista) {
         this.contratoLista = contratoLista;
     }
 

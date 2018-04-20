@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.gov.am.tce.auditor.domain.BemPublico;
-import br.gov.am.tce.auditor.domain.Contract;
+import br.gov.am.tce.auditor.domain.Contrato;
 import br.gov.am.tce.auditor.domain.Medicao;
 
 /**
@@ -27,8 +27,8 @@ public class EContasFetchr {
     private static final String TAG = "EContasFetchr";
 
     private static final String API_KEY = "XXXXX";
-    private static final String FETCH_CONTRACTS = "econtas.contratos";
     private static final String FETCH_BEMPUBLICO = "econtas.bempublico";
+    private static final String FETCH_CONTRACTS = "econtas.contratos";
     private static final String FETCH_MEDICAO = "econtas.medicao";
     private static final Uri ENDPOINT = Uri
             .parse("https://econtas.tce.am.gov.br/rest/")
@@ -37,20 +37,20 @@ public class EContasFetchr {
             .appendQueryParameter("format", "json")
             .build();
 
-    public List<Contract> fetchContracts(String exercicio, String municipio, String jurisdicionado) {
-        List<Contract> contractList = new ArrayList<>();
+    public List<Contrato> fetchContracts(String municipio, String jurisdicionado, String exercicio) {
+        List<Contrato> contratoList = new ArrayList<>();
 
         String argumentStr = null;
-        if(exercicio != null) {
-            argumentStr += exercicio;
-            if(municipio != null) argumentStr += "&" + municipio;
+        if(municipio != null) {
+            argumentStr += municipio;
             if(jurisdicionado != null) argumentStr += "&" + jurisdicionado;
+            if(exercicio != null) argumentStr += "&" + exercicio;
         } else {
-            if(municipio != null) {
-                argumentStr += municipio;
-                if(jurisdicionado != null) argumentStr += "&" + jurisdicionado;
+            if(jurisdicionado != null) {
+                argumentStr += jurisdicionado;
+                if(exercicio != null) argumentStr += "&" + exercicio;
             }
-            argumentStr += jurisdicionado;
+            argumentStr += exercicio;
         }
 
         try {
@@ -58,98 +58,153 @@ public class EContasFetchr {
                     .appendQueryParameter("method", FETCH_CONTRACTS)
                     .appendQueryParameter("arguments", argumentStr)
                     .build().toString();
-//            String jsonStringContracts = getUrlString(url);
-            String jsonStringContracts = "{\"contratos\":{\"contrato\":[{\"id\":\"123\",\"numero\":\"456/2018\",\"prazo\":\"360\",\"dataInicio\":\"05/01/2018\",\"bemPublico\":\"PNT321\",\"contratado\":\"OAS Engenharia\"},{\"id\":\"456\",\"numero\":\"13/2007\",\"prazo\":\"180\",\"dataInicio\":\"21/05/2007\",\"bemPublico\":\"EE11491\",\"contratado\":\"Oderbreach Engenharia\",\"medicao\":[{\"id\":\"12\",\"name\":\"adrf\"}]},{\"id\":\"789\",\"numero\":\"458/2009\",\"prazo\":\"270\",\"dataInicio\":\"12/09/2009\",\"bemPublico\":\"HH42\",\"contratado\":\"Mendes Junior Engenharia\"},{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}]}}";
-            JSONObject jsonBody = new JSONObject(jsonStringContracts);
-            parseContracts(contractList, jsonBody);
+//          String jsonStringContratos = getUrlString(url);
+            String jsonStringContratos = "{\"contrato\":{\"contratos\":[{\"id\":\"123\",\"numero\":\"456/2018\",\"prazo\":\"360\",\"dataInicio\":\"05/01/2018\",\"bemPublico\":\"PNT321\",\"contratado\":\"OAS Engenharia\"},{\"id\":\"456\",\"numero\":\"13/2007\",\"prazo\":\"180\",\"dataInicio\":\"21/05/2007\",\"bemPublico\":\"EE11491\",\"contratado\":\"Oderbreach Engenharia\",\"medicao\":[{\"id\":\"12\",\"name\":\"adrf\"}]},{\"id\":\"789\",\"numero\":\"458/2009\",\"prazo\":\"270\",\"dataInicio\":\"12/09/2009\",\"bemPublico\":\"HH42\",\"contratado\":\"Mendes Junior Engenharia\"},{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}]}}";
+            JSONObject jsonBody = new JSONObject(jsonStringContratos);
+            parseContratos(contratoList, jsonBody);
         } catch (IOException ioe) {
             Log.e(TAG, "error");
         } catch (JSONException jse) {
             Log.e(TAG, jse.getMessage());
         }
-        return contractList;
+        return contratoList;
     }
 
+    public Contrato fetchContract(String contractId) {
+        Contrato contrato = null;
+        try {
+            String url = ENDPOINT.buildUpon()
+                    .appendQueryParameter("method", FETCH_CONTRACTS)
+                    .appendQueryParameter("arguments", contractId)
+                    .build().toString();
+//          String jsonStringContrato = getUrlString(url);
+            String jsonStringContrato = "{\"contrato\":{\"id\":\"123\",\"numero\":\"456/2018\",\"prazo\":\"360\",\"dataInicio\":\"05/01/2018\",\"bemPublico\":\"PNT321\",\"contratado\":\"OAS Engenharia\",\"medicao\":[{\"id\":\"12\",\"numero\":\"1234\",\"dataInicio\":\"12/08/2009\",\"dataFim\":\"14/12/2009\",\"contratoId\":\"123\"}]}}}";
+            JSONObject jsonBody = new JSONObject(jsonStringContrato);
+            contrato = parseContrato(jsonBody);
+        } catch (IOException ioe) {
+            Log.e(TAG, ioe.getMessage());
+        } catch (JSONException jse) {
+            Log.e(TAG, jse.getMessage());
+        }
+        finally {
+            return contrato;
+        }
+    }
     public BemPublico fetchBemPublico(String bemPublico_str) {
+        BemPublico bemPublico = null;
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_BEMPUBLICO)
                     .appendQueryParameter("arguments", bemPublico_str)
                     .build().toString();
-            String jsonStringBemPublico = getUrlString(url);
+//          String jsonStringBemPublico = getUrlString(url);
+            String jsonStringBemPublico = "{\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contrato\":[{\"id\":\"123\"},{\"id\":\"456\"}]}}";
             JSONObject jsonBody = new JSONObject(jsonStringBemPublico);
-            return parseBemPublico(jsonBody);
+            bemPublico =  parseBemPublico(jsonBody);
         } catch (IOException ioe) {
             Log.e(TAG, ioe.getMessage());
         } catch (JSONException jse) {
             Log.e(TAG, jse.getMessage());
         } finally {
-            return null;
+            return bemPublico;
         }
     }
 
-    public void fetchMedicao(String medicao) {
+    public Medicao fetchMedicao(String medicao_str) {
+        Medicao medicao = null;
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_MEDICAO)
-                    .appendQueryParameter("arguments", medicao)
+                    .appendQueryParameter("arguments", medicao_str)
                     .build().toString();
-            String jsonStringMedicao = getUrlString(url);
+//          String jsonStringMedicao = getUrlString(url);
+            String jsonStringMedicao = "{\"medicao\":{\"id\":\"abc\",\"numero\":\"1\",\"dataInicio\":\"12/06/2009\",\"dataFim\":\"14/12/2009\",\"contratoId\":\"456\"}}";
             JSONObject jsonBody = new JSONObject(jsonStringMedicao);
-            parseMedicao(jsonBody);
+            medicao = parseMedicao(jsonBody);
         } catch (IOException ioe) {
             Log.e(TAG, ioe.getMessage());
         } catch (JSONException jse) {
             Log.e(TAG, jse.getMessage());
+        } finally {
+            return medicao;
         }
     }
 
-    private void parseContracts(List<Contract> contractList, JSONObject jsonBody)
+    private void parseContratos(List<Contrato> contratoList, JSONObject jsonBody)
         throws IOException, JSONException {
 
-        JSONObject contractJsonObject = jsonBody.getJSONObject("contratos");
-        JSONArray contractJsonArray = contractJsonObject.getJSONArray("contrato");
+        JSONObject contratoJsonObject = jsonBody.getJSONObject("contrato");
+        JSONArray contratoJsonArray = contratoJsonObject.getJSONArray("contratos");
 
-        for(int i = 0; i < contractJsonArray.length(); i++) {
-            JSONObject contractObject = contractJsonArray.getJSONObject(i);
-            Contract contract = new Contract();
-            contract.setId(contractObject.getString("id"));
-            contract.setNumero(contractObject.getString("numero"));
-            contract.setPrazo(contractObject.getString("prazo"));
-            contract.setDataInicio(contractObject.getString("dataInicio"));
-            contract.setBemPublico(contractObject.getString("bemPublico"));
-            contract.setContratado(contractObject.getString("contratado"));
-            if(contractObject.has("medicao")) {
-                JSONArray medicaoJsonArray = contractObject.getJSONArray("medicao");
+        for(int i = 0; i < contratoJsonArray.length(); i++) {
+            JSONObject contratoObject = contratoJsonArray.getJSONObject(i);
+            Contrato contract = new Contrato();
+            contract.setId(contratoObject.getString("id"));
+            contract.setNumero(contratoObject.getString("numero"));
+            contract.setPrazo(contratoObject.getString("prazo"));
+            contract.setDataInicio(contratoObject.getString("dataInicio"));
+            contract.setBemPublico(contratoObject.getString("bemPublico"));
+            contract.setContratado(contratoObject.getString("contratado"));
+            if(contratoObject.has("medicao")) {
+                JSONArray medicaoJsonArray = contratoObject.getJSONArray("medicao");
                 for(int j = 0; j < medicaoJsonArray.length(); j++) {
                     JSONObject medicaoObject = medicaoJsonArray.getJSONObject(j);
                     Medicao medicao = new Medicao();
                     medicao.setId(medicaoObject.getString("id"));
-                    medicao.setName(medicaoObject.getString("name"));
+                    medicao.setNumero(medicaoObject.getString("name"));
                     contract.getMedicaoLista().add(medicao);
                 }
             }
-            contractList.add(contract);
+            contratoList.add(contract);
         }
+    }
+
+    private Contrato parseContrato(JSONObject jsonBody)
+            throws IOException, JSONException {
+        JSONObject contratoJsonObject = jsonBody.getJSONObject("contrato");
+        Contrato contrato = new Contrato();
+        contrato.setId(contratoJsonObject.getString("id"));
+        contrato.setNumero(contratoJsonObject.getString("numero"));
+        contrato.setPrazo(contratoJsonObject.getString("prazo"));
+        contrato.setDataInicio(contratoJsonObject.getString("dataInicio"));
+        contrato.setBemPublico(contratoJsonObject.getString("bemPublico"));
+        contrato.setContratado(contratoJsonObject.getString("contratado"));
+        if(contratoJsonObject.has("medicao")) {
+            JSONArray medicaoJsonArray = contratoJsonObject.getJSONArray("medicao");
+            for(int i = 0; i < medicaoJsonArray.length(); i++) {
+                JSONObject medicaoObject = medicaoJsonArray.getJSONObject(i);
+                Medicao medicao = new Medicao();
+                medicao.setId(medicaoObject.getString("id"));
+                medicao.setNumero(medicaoObject.getString("numero"));
+                medicao.setDataInicio(medicaoObject.getString("dataInicio"));
+                medicao.setDataFim(medicaoObject.getString("dataFim"));
+                medicao.setContratoId(medicaoObject.getString("contratoId"));
+                contrato.getMedicaoLista().add(medicao);
+            }
+        }
+        return contrato;
     }
 
     private BemPublico parseBemPublico(JSONObject jsonBody)
         throws IOException, JSONException {
 
+        JSONObject bempublicoJsonObject = jsonBody.getJSONObject("bempublico");
         BemPublico bemPublico = new BemPublico();
-        bemPublico.setId(jsonBody.getString("id"));
-        bemPublico.setArea(jsonBody.getString("area"));
-        bemPublico.setLatitude(jsonBody.getString("latitude"));
-        bemPublico.setLongitude(jsonBody.getString("longitude"));
-        bemPublico.setTipo(jsonBody.getString("tipo"));
-        bemPublico.setNome(jsonBody.getString("nome"));
-        bemPublico.setJurisdicionado(jsonBody.getString("jurisdicionado"));
-        bemPublico.setEndereco(jsonBody.getString("endereco"));
-        if(jsonBody.has("contrato")) {
-            JSONArray contratoJsonArray = jsonBody.getJSONArray("contrato");
+        bemPublico.setId(bempublicoJsonObject.getString("id"));
+        bemPublico.setArea(bempublicoJsonObject.getString("area"));
+        bemPublico.setLatitude(bempublicoJsonObject.getString("latitude"));
+        bemPublico.setLongitude(bempublicoJsonObject.getString("longitude"));
+        bemPublico.setTipo(bempublicoJsonObject.getString("tipo"));
+        bemPublico.setNome(bempublicoJsonObject.getString("nome"));
+        bemPublico.setJurisdicionado(bempublicoJsonObject.getString("jurisdicionado"));
+        bemPublico.setEndereco(bempublicoJsonObject.getString("endereco"));
+        if(bempublicoJsonObject.has("contrato")) {
+            JSONArray contratoJsonArray = bempublicoJsonObject.getJSONArray("contrato");
             for(int i = 0; i < contratoJsonArray.length(); i++) {
-                JSONObject contratoObject = contratoJsonArray.getJSONObject(i);
-                Contract contrato = new Contract();
+                JSONObject contratoJsonObject = contratoJsonArray.getJSONObject(i);
+                Contrato contrato = new Contrato();
+                contrato.setId(contratoJsonObject.getString("id"));
+                bemPublico.getContratos().add(contrato);
             }
         }
         return bemPublico;
@@ -157,10 +212,13 @@ public class EContasFetchr {
 
     private Medicao parseMedicao (JSONObject jsonBody)
         throws IOException, JSONException {
-
+        JSONObject medicaoObject = jsonBody.getJSONObject("medicao");
         Medicao medicao = new Medicao();
-        medicao.setId("id");
-        medicao.setName("nome");
+        medicao.setId(medicaoObject.getString("id"));
+        medicao.setNumero(medicaoObject.getString("numero"));
+        medicao.setDataInicio(medicaoObject.getString("dataInicio"));
+        medicao.setDataFim(medicaoObject.getString("dataFim"));
+        medicao.setContratoId(medicaoObject.getString("contratoId"));
 
         return medicao;
     }

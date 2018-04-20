@@ -15,22 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.domain.Contract;
-import br.gov.am.tce.auditor.domain.Medicao;
+import br.gov.am.tce.auditor.domain.Contrato;
 
 /**
  * Created by Adriano on 19/03/2018.
  */
 
-public class ContractPagerActivity extends AppCompatActivity {
-    private static final String TAG = "ContractPagerActivity";
+public class ContratoPagerActivity extends AppCompatActivity {
+    private static final String TAG = "ContratoPagerActivity";
     private static final String EXTRA_CONTRACT_LIST = "br.gov.am.tce.auditor.contractList";
 
     private ViewPager mViewPager;
-    private List<Contract> mContracts = new ArrayList<>();
+    private List<Contrato> mContracts = new ArrayList<>();
 
-    public static Intent newIntent(Context context, List<Contract> contracts) {
-        Intent intent = new Intent(context, ContractPagerActivity.class);
+    public static Intent newIntent(Context context, List<Contrato> contracts) {
+        Intent intent = new Intent(context, ContratoPagerActivity.class);
         intent.putParcelableArrayListExtra(EXTRA_CONTRACT_LIST, (ArrayList<? extends Parcelable>) contracts);
         return intent;
     }
@@ -47,8 +46,8 @@ public class ContractPagerActivity extends AppCompatActivity {
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
-                Contract contract = mContracts.get(position);
-                return ContractFragment.newInstance(contract);
+                Contrato contract = mContracts.get(position);
+                return ContratoFragment.newInstance(contract);
             }
 
             @Override
@@ -56,6 +55,6 @@ public class ContractPagerActivity extends AppCompatActivity {
                 return mContracts.size();
             }
         });
-
     }
+
 }

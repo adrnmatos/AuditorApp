@@ -9,7 +9,10 @@ import android.os.Parcelable;
 
 public class Medicao implements Parcelable{
     private String id;
-    private String name;
+    private String numero;
+    private String dataInicio;
+    private String dataFim;
+    private String contratoId;
 
     public Medicao() {}
 
@@ -21,7 +24,10 @@ public class Medicao implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
-        parcel.writeString(name);
+        parcel.writeString(numero);
+        parcel.writeString(dataInicio);
+        parcel.writeString(dataFim);
+        parcel.writeString(contratoId);
     }
 
     public static final Parcelable.Creator<Medicao> CREATOR = new Parcelable.Creator<Medicao>() {
@@ -35,7 +41,10 @@ public class Medicao implements Parcelable{
 
     public Medicao(Parcel in) {
         id = in.readString();
-        name = in.readString();
+        numero = in.readString();
+        dataInicio = in.readString();
+        dataFim = in.readString();
+        contratoId = in.readString();
     }
 
     public String getId() {
@@ -46,13 +55,40 @@ public class Medicao implements Parcelable{
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
+    public String getDataInicio() {
+        return dataInicio;
+    }
 
+    public void setDataInicio(String dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public String getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(String dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public String getContratoId() {
+        return contratoId;
+    }
+
+    public void setContratoId(String contratoId) {
+        this.contratoId = contratoId;
+    }
+
+    @Override
+    public String toString() {
+        return this.numero;
+    }
 }

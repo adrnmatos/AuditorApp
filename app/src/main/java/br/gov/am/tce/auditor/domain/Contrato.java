@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Adriano on 14/03/2018.
  */
 
-public class Contract implements Parcelable {
+public class Contrato implements Parcelable {
     private String id;
     private String numero;
     private String prazo;
@@ -19,7 +19,7 @@ public class Contract implements Parcelable {
     private String contratado;
     private List<Medicao> medicaoLista = new ArrayList<>();
 
-    public Contract() {}
+    public Contrato() {}
 
     public int describeContents() {
         return 0;
@@ -35,17 +35,17 @@ public class Contract implements Parcelable {
         out.writeList(medicaoLista);
     }
 
-    public static final Parcelable.Creator<Contract> CREATOR = new Parcelable.Creator<Contract>() {
-        public Contract createFromParcel(Parcel in) {
-            return new Contract(in);
+    public static final Parcelable.Creator<Contrato> CREATOR = new Parcelable.Creator<Contrato>() {
+        public Contrato createFromParcel(Parcel in) {
+            return new Contrato(in);
         }
 
-        public Contract[] newArray(int size) {
-            return new Contract[size];
+        public Contrato[] newArray(int size) {
+            return new Contrato[size];
         }
     };
 
-    public Contract(Parcel in) {
+    public Contrato(Parcel in) {
         id = in.readString();
         numero = in.readString();
         prazo = in.readString();
@@ -109,5 +109,10 @@ public class Contract implements Parcelable {
 
     public void setMedicaoLista(List<Medicao> medicaoLista) {
         this.medicaoLista = medicaoLista;
+    }
+
+    @Override
+    public String toString() {
+        return this.id;
     }
 }

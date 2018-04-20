@@ -9,10 +9,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.domain.Photo;
 import br.gov.am.tce.auditor.database.PhotoBaseHelper;
 import br.gov.am.tce.auditor.database.PhotoCursorWrapper;
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;
+import br.gov.am.tce.auditor.domain.Photo;
 
 /**
  * Created by adrnm on 24/10/2017.
@@ -121,6 +121,9 @@ public class PhotoLab {
         values.put(PhotoTable.Cols.LATITUDE, String.valueOf(photo.getLatitude()));
         values.put(PhotoTable.Cols.LONGITUDE, String.valueOf(photo.getLongitude()));
         values.put(PhotoTable.Cols.TIME, String.valueOf(photo.getTime()));
+        values.put(PhotoTable.Cols.BEMPUBLICO, String.valueOf(photo.getBemPublico()));
+        values.put(PhotoTable.Cols.CONTRATO, String.valueOf(photo.getContrato()));
+        values.put(PhotoTable.Cols.MEDICAO, String.valueOf(photo.getMedicao()));
 
         return values;
     }

@@ -1,38 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:layout_editor_absoluteY="81dp">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/ctGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.052083332" />
+
+    <TextView
+        android:id="@+id/ctLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/id"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ctLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/numero"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/ctLabel1" />
+
+    <TextView
+        android:id="@+id/ctLabel3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/prazo"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/ctLabel2" />
+
+    <TextView
+        android:id="@+id/ctLabel4"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/data_inicio"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/ctLabel3" />
+
+    <TextView
+        android:id="@+id/ctLabel5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/bem_publico"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/ctLabel4" />
+
+    <TextView
+        android:id="@+id/ctLabel6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/contratado"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/ctLabel5" />
+
+    <TextView
+        android:id="@+id/ctLabel7"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/medicao_lista"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/ctLabel6" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/ctGuide2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.46197916" />
 
     <TextView
         android:id="@+id/CTId_TV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/CTNumero_TV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/CTId_TV" />
 
     <TextView
         android:id="@+id/CTPrazo_TV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/CTNumero_TV" />
 
     <TextView
         android:id="@+id/CTDataInicio_TV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/CTPrazo_TV" />
 
     <TextView
         android:id="@+id/CTBemPublico_TV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/CTDataInicio_TV" />
 
     <TextView
         android:id="@+id/CTContratado_TV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/CTBemPublico_TV" />
 
-</LinearLayout>
+
+    <Spinner
+        android:id="@+id/CTMedicoes_SPN"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/CTContratado_TV" />
+
+    <Button
+        android:id="@+id/CTFetchMedicoes_BTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/fetch_medicao_btn"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/CTMedicoes_SPN" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9557292" />
+
+</android.support.constraint.ConstraintLayout>

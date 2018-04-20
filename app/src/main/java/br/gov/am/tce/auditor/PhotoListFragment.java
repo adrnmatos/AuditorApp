@@ -207,6 +207,8 @@ public class PhotoListFragment extends Fragment {
                 DownloadPhotos();
                 return true;
             case R.id.search:
+                // Photo newPhoto = new Photo();
+                // Intent searchIntent = SearchActivity.newIntent(getActivity(), newPhoto);
                 Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(searchIntent);
                 return true;
@@ -263,6 +265,8 @@ public class PhotoListFragment extends Fragment {
 
     private void uploadPhotos() {
         for (final Photo photo: mSelectedPhotosList) {
+            photo.registerItselfToDBServer(getActivity());
+/*
             final DatabaseReference photoDBReference = mDatabaseReference.child(PHOTOS).child(photo.getId());
             photoDBReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -278,11 +282,13 @@ public class PhotoListFragment extends Fragment {
                     Log.e(TAG, "Failed on writing to database: " + databaseError.toException());
                 }
             });
+*/
         }
         updateUI();
     }
 
     private void putImageInStorage(final DatabaseReference photoDBReference, final Photo photo) {
+/*
         File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
         Uri uri = FileProvider.getUriForFile(getActivity(),"br.gov.am.tce.auditor.fileProvider", mPhotoFile);
         StorageReference photoStorageReference = mStorageReference.child(photo.getId());
@@ -297,6 +303,7 @@ public class PhotoListFragment extends Fragment {
                 }
             }
         });
+*/
     }
 
 }

@@ -27,20 +27,34 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignInActivity"/>
+        <activity android:name=".SignInActivity"
+            android:label="Login"/>
 
         <activity android:name=".PhotoListActivity"
             android:label="Photo List"/>
 
         <activity android:name=".PhotoActivity"
-            android:parentActivityName=".PhotoListActivity"/>
+            android:parentActivityName=".PhotoListActivity"
+            android:label="Foto"/>
 
         <activity android:name=".MapsActivity"
-            android:parentActivityName=".PhotoListActivity"/>
+            android:parentActivityName=".PhotoListActivity"
+            android:label="Mapa"/>
 
-        <activity android:name=".SearchActivity"/>
+        <activity android:name=".SearchActivity"
+            android:label="Pesquisa"/>
 
-        <activity android:name=".ContractPagerActivity"/>
+        <activity android:name=".ContratoPagerActivity"
+            android:label="Contrato"/>
+
+        <activity android:name=".BemPublicoActivity"
+            android:label="Bem Público"/>
+
+        <activity android:name=".ContratoActivity"
+            android:label="Contrato"/>
+
+        <activity android:name=".MedicaoActivity"
+            android:label="Medicao"/>
 
         <provider
             android:authorities="br.gov.am.tce.auditor.fileProvider"

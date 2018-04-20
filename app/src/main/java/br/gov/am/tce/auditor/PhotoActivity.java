@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.util.List;
 
 import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.helpers.AuditorPreferences;
 import br.gov.am.tce.auditor.helpers.PhotoLab;
 import br.gov.am.tce.auditor.helpers.PictureUtils;
 
@@ -57,16 +59,18 @@ public class PhotoActivity extends AppCompatActivity {
     private static final String EXTRA_PHOTO_ID = "br.gov.am.tce.auditor.photo_id";
     private static final int REQUEST_PHOTO = 0;
     private static final int REQUEST_CHECK_SETTINGS = 1;
+
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
+
     private Photo mPhoto;
     private File mPhotoFile;
-    private EditText mPhotoNote;
-    private ImageButton mCameraButton;
     private ImageView mPhotoView;
     private final Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+    private TextView photo_context_tv;
 
     public static Intent newIntent(Context packageContext, String photoId) {
         Intent intent = new Intent(packageContext, PhotoActivity.class);
@@ -83,6 +87,13 @@ public class PhotoActivity extends AppCompatActivity {
         mPhoto = PhotoLab.get(this).getPhoto(photoId);
         mPhotoFile = PhotoLab.get(this).getPhotoFile(mPhoto);
 
+        TextView photo_author_tv = findViewById(R.id.PHAuthor_TV);
+        photo_author_tv.setText(AuditorPreferences.getUsername(this));
+
+        photo_context_tv = findViewById(R.id.PHContext_TV);
+        photo_context_tv.setText(mPhoto.getBemPublico() + "/" + mPhoto.getContrato() + "/" + mPhoto.getMedicao());
+
+        /* location code initialization ******************/
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         try{
             mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -106,14 +117,15 @@ public class PhotoActivity extends AppCompatActivity {
 
         configureLocationRequest();
 
+        /* controls initialization *********************/
         mPhotoView = findViewById(R.id.photo_photo_view);
         updatePhotoView();
 
-        mCameraButton = findViewById(R.id.photo_camera);
+        ImageButton mCameraButton = findViewById(R.id.photo_camera);
         boolean canTakePhoto = mPhotoFile != null && captureImageIntent.resolveActivity(getPackageManager()) != null;
         mCameraButton.setEnabled(canTakePhoto);
 
-        mPhotoNote = findViewById(R.id.photo_note);
+        EditText mPhotoNote = findViewById(R.id.photo_note);
         mPhotoNote.setText(mPhoto.getTitle());
         mPhotoNote.addTextChangedListener(new TextWatcher() {
             @Override
@@ -140,6 +152,14 @@ public class PhotoActivity extends AppCompatActivity {
         startLocationUpdates();
     }
 
+    public void onClearButtonClick(View v) {
+        mPhoto.setBemPublico("");
+        mPhoto.setContrato("");
+        mPhoto.setMedicao("");
+
+        photo_context_tv.setText("");
+    }
+
     private void startLocationUpdates() {
         try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
@@ -151,7 +171,6 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-
         stopLocationUpdates();
         PhotoLab.get(this).updatePhoto(mPhoto);
     }
@@ -193,13 +212,13 @@ public class PhotoActivity extends AppCompatActivity {
         });
     }
 
+    /** take photo ***************/
     public void takePhoto(View v) {
         Uri uri = FileProvider.getUriForFile(this, "br.gov.am.tce.auditor.fileProvider", mPhotoFile);
         captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
         List<ResolveInfo> cameraActivities = getPackageManager().queryIntentActivities(captureImageIntent, PackageManager.MATCH_DEFAULT_ONLY);
-        for(ResolveInfo activity : cameraActivities) {
-            grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        for(ResolveInfo activity : cameraActivities) {grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         }
 
         mPhoto.setLatitude(mLastLocation.getLatitude());
@@ -218,6 +237,7 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+    /** menu methods *****************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_photo, menu);
@@ -236,13 +256,13 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+    /** callback from takePhoto and location request configuration ************/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_PHOTO) {
             Uri uri = FileProvider.getUriForFile(this,
                     "br.gov.am.tce.auditor.fileProvider",
                     mPhotoFile);
-
             revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             updatePhotoView();
         } else if (requestCode == REQUEST_CHECK_SETTINGS) {

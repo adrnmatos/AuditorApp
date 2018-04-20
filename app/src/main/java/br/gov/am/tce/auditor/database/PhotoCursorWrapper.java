@@ -3,8 +3,8 @@ package br.gov.am.tce.auditor.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import br.gov.am.tce.auditor.domain.Photo;
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;
+import br.gov.am.tce.auditor.domain.Photo;
 
 /**
  * Created by adrnm on 24/10/2017.
@@ -22,12 +22,18 @@ public class PhotoCursorWrapper extends CursorWrapper {
         Double latitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LATITUDE)));
         Double longitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LONGITUDE)));
         long time = Long.valueOf(getString(getColumnIndex(PhotoTable.Cols.TIME)));
+        String bemPublico = getString(getColumnIndex(PhotoTable.Cols.BEMPUBLICO));
+        String contrato = getString(getColumnIndex(PhotoTable.Cols.CONTRATO));
+        String medicao = getString(getColumnIndex(PhotoTable.Cols.MEDICAO));
 
         Photo photo = new Photo(uuidString);
         photo.setTitle(title);
         photo.setLatitude(latitude);
         photo.setLongitude(longitude);
         photo.setTime(time);
+        photo.setBemPublico(bemPublico);
+        photo.setContrato(contrato);
+        photo.setMedicao(medicao);
 
         return photo;
     }

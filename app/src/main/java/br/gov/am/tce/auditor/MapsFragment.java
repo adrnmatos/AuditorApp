@@ -1,6 +1,7 @@
 package br.gov.am.tce.auditor;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     public static MapsFragment newInstance(List<Photo> photoList) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PHOTOS, (ArrayList<Photo>)photoList);
+        args.putParcelableArrayList(ARG_PHOTOS, (ArrayList<? extends Parcelable>) photoList);
         MapsFragment fragment = new MapsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -38,7 +39,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        photoList = (ArrayList<Photo>) getArguments().getSerializable(ARG_PHOTOS);
+        photoList = getArguments().getParcelableArrayList(ARG_PHOTOS);
         getMapAsync(this);
     }
 
