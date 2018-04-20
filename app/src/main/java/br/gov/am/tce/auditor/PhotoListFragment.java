@@ -2,12 +2,10 @@ package br.gov.am.tce.auditor;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,10 +19,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,6 +47,7 @@ import static android.widget.CompoundButton.OnCheckedChangeListener;
 public class PhotoListFragment extends Fragment {
     private static final String TAG = "PhotoListFragment";
     private static final String PHOTOS = "photos";
+    private DatabaseReference photosDBReference = FirebaseDatabase.getInstance().getReference().child(PHOTOS);
 
     private RecyclerView mPhotoRecyclerView;
     private PhotoAdapter mAdapter;
@@ -204,11 +200,9 @@ public class PhotoListFragment extends Fragment {
                 }
                 return true;
             case R.id.check_new_photos_on_server:
-                DownloadPhotos();
+                DownloadPhotos(photosDBReference);
                 return true;
             case R.id.search:
-                // Photo newPhoto = new Photo();
-                // Intent searchIntent = SearchActivity.newIntent(getActivity(), newPhoto);
                 Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(searchIntent);
                 return true;
@@ -217,9 +211,8 @@ public class PhotoListFragment extends Fragment {
         }
     }
 
-    private void DownloadPhotos() {
-        DatabaseReference photoDBReference = mDatabaseReference.child(PHOTOS);
-        photoDBReference.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void DownloadPhotos(DatabaseReference reference) {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot != null) {
@@ -240,6 +233,10 @@ public class PhotoListFragment extends Fragment {
                 Log.e(TAG, "Failed on reading database: " + databaseError.toException());
             }
         });
+    }
+
+    private void recurOnChildren() {
+
     }
 
     private void getImageFromServer(final Photo photo) {
@@ -266,44 +263,8 @@ public class PhotoListFragment extends Fragment {
     private void uploadPhotos() {
         for (final Photo photo: mSelectedPhotosList) {
             photo.registerItselfToDBServer(getActivity());
-/*
-            final DatabaseReference photoDBReference = mDatabaseReference.child(PHOTOS).child(photo.getId());
-            photoDBReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getValue() == null) {
-                        photoDBReference.setValue(photo);
-                        Log.d(TAG, "getTime returned: " + photo.getTime());
-                        putImageInStorage(photoDBReference, photo);
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.e(TAG, "Failed on writing to database: " + databaseError.toException());
-                }
-            });
-*/
         }
         updateUI();
-    }
-
-    private void putImageInStorage(final DatabaseReference photoDBReference, final Photo photo) {
-/*
-        File mPhotoFile = PhotoLab.get(getActivity()).getPhotoFile(photo);
-        Uri uri = FileProvider.getUriForFile(getActivity(),"br.gov.am.tce.auditor.fileProvider", mPhotoFile);
-        StorageReference photoStorageReference = mStorageReference.child(photo.getId());
-        photoStorageReference.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if(task.isSuccessful()) {
-                    Log.d(TAG, "Successfully uploaded photo: " + photo.getId());
-                } else {
-                    photoDBReference.removeValue();
-                    Log.e(TAG, "Failed on uploading file" + task.getException());
-                }
-            }
-        });
-*/
     }
 
 }

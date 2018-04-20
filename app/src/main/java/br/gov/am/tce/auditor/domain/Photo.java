@@ -212,25 +212,26 @@ public class Photo implements Parcelable {
     private DatabaseReference getPhotoReference() {
         DatabaseReference photoDBRef = mDatabaseReference.child(PHOTOS);
 
-        if (!empty(mBemPublico)) {
+        if (!empty(Photo.this.getBemPublico())) {
             DatabaseReference photoDBRef1 = photoDBRef.child(Photo.this.getBemPublico());
-            if (!empty(mContrato)) {
+            if (!empty(Photo.this.getContrato())) {
                 DatabaseReference photoDBRef2 = photoDBRef1.child(Photo.this.getContrato());
-                if (!empty(mMedicao)) {
-                    return photoDBRef2.child(Photo.this.getMedicao());
+                if (!empty(Photo.this.getMedicao())) {
+                    return photoDBRef2.child(Photo.this.getMedicao()).child(Photo.this.getId());
                 } else {
-                    return photoDBRef2;
+                    return photoDBRef2.child(Photo.this.getId());
                 }
             } else {
-                return photoDBRef1;
+                return photoDBRef1.child(Photo.this.getId());
             }
         } else {
-            return photoDBRef;
+            return photoDBRef.child(Photo.this.getId());
         }
     }
 
     private static boolean empty(final String s) {
         return s == null || s.trim().isEmpty();
     }
+
 
 }
