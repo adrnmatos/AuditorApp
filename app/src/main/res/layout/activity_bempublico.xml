@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bpGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.052083332" />
+
+    <TextView
+        android:id="@+id/bpLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/id"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bpLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/area"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel1" />
+
+    <TextView
+        android:id="@+id/bpLabel3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/latitude"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel2" />
+
+    <TextView
+        android:id="@+id/bpLabel4"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/longitude"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel3" />
+
+    <TextView
+        android:id="@+id/bpLabel5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/tipo"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel4" />
+
+    <TextView
+        android:id="@+id/bpLabel6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/nome"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel5" />
+
+    <TextView
+        android:id="@+id/bpLabel7"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/jurisdicionado"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel6" />
+
+    <TextView
+        android:id="@+id/bpLabel8"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/endereco"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel7" />
+
+    <TextView
+        android:id="@+id/bpLabel9"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/contrato_lista"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/bpLabel8" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bpGuide2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.452083332" />
+
+    <TextView
+        android:id="@+id/BPId_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/BPArea_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPId_TV" />
+
+    <TextView
+        android:id="@+id/BPLatitude_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPArea_TV" />
+
+    <TextView
+        android:id="@+id/BPLongitude_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPLatitude_TV" />
+
+    <TextView
+        android:id="@+id/BPTipo_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPLongitude_TV" />
+
+    <TextView
+        android:id="@+id/BPNome_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPTipo_TV" />
+
+    <TextView
+        android:id="@+id/BPJurisdicionado_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPNome_TV" />
+
+    <TextView
+        android:id="@+id/BPEndereco_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPJurisdicionado_TV" />
+
+    <Spinner
+        android:id="@+id/BPContratos_SPN"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/BPEndereco_TV" />
+
+    <Button
+        android:id="@+id/BPFetchContrato_BTN"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/buscar_contrato_btn"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/BPContratos_SPN" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9557292" />
+
+
+</android.support.constraint.ConstraintLayout>
