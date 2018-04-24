@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:layout_editor_absoluteY="81dp">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/searchContratoGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.052083332" />
+
+    <TextView
+        android:id="@+id/searchContratoLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/exercicio"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        app:layout_constraintStart_toStartOf="@+id/searchContratoGuide1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/searchContratoLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/municipio"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        app:layout_constraintStart_toStartOf="@+id/searchContratoGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/searchContratoLabel1" />
+
+    <TextView
+        android:id="@+id/searchContratoLabel3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/jurisdicionado"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        app:layout_constraintStart_toStartOf="@+id/searchContratoGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/searchContratoLabel2" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/searchContratoGuide2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5572917" />
+
+    <Spinner
+        android:id="@+id/searchContratoExercicio_SPN"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/searchContratoGuide2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Spinner
+        android:id="@+id/searchContratoMunicipio_SPN"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/searchContratoGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/searchContratoExercicio_SPN" />
+
+    <Spinner
+        android:id="@+id/searchContratoJurisdicionado_SPN"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/searchContratoGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/searchContratoMunicipio_SPN" />
+
+    <Button
+        android:id="@+id/searchContrato_BTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/buscar_contratos_btn"
+        app:layout_constraintEnd_toStartOf="@+id/searchGuide3"
+        app:layout_constraintTop_toBottomOf="@+id/searchContratoJurisdicionado_SPN" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/searchGuide3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9557292" />
+
+</android.support.constraint.ConstraintLayout>

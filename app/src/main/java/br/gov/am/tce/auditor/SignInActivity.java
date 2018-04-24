@@ -113,7 +113,7 @@ public class SignInActivity extends AppCompatActivity implements
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             AuditorPreferences.setUsername(SignInActivity.this, acct.getDisplayName());
-                            startActivity(new Intent(SignInActivity.this, PhotoListActivity.class));
+                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
                             finish();
                         }
                     }

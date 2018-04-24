@@ -99,7 +99,7 @@ public class MedicaoActivity extends AppCompatActivity {
         @Override
         protected Contrato doInBackground(String... strings) {
             String contractId = strings[0];
-            return new EContasFetchr().fetchContract(contractId);
+            return new EContasFetchr().fetchContrato(contractId);
         }
 
         @Override

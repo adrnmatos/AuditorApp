@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/searchBemPublicoGuide1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.052083332" />
+
+    <TextView
+        android:id="@+id/searchBemPublicoLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/municipio"
+        app:layout_constraintStart_toStartOf="@+id/searchBemPublicoGuide1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/searchBemPublicoLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/jurisdicionado"
+        app:layout_constraintStart_toStartOf="@+id/searchBemPublicoGuide1"
+        app:layout_constraintTop_toBottomOf="@+id/searchBemPublicoLabel1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/searchBemPublicoGuide2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <Spinner
+        android:id="@+id/searchBemPublicoMunicipio_SPN"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/searchBemPublicoGuide2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/searchBemPublicoJurisdicionado_SPN"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/searchBemPublicoGuide2"
+        app:layout_constraintTop_toBottomOf="@+id/searchBemPublicoMunicipio_SPN" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/searchBemPublicoGuide3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9557292" />
+
+    <Button
+        android:id="@+id/searchBemPublico_BTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/buscar_benspublicos_btn"
+        app:layout_constraintEnd_toStartOf="@+id/searchBemPublicoGuide3"
+        app:layout_constraintTop_toBottomOf="@+id/searchBemPublicoJurisdicionado_SPN" />
+
+
+</android.support.constraint.ConstraintLayout>

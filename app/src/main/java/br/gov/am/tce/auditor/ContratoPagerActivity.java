@@ -25,7 +25,6 @@ public class ContratoPagerActivity extends AppCompatActivity {
     private static final String TAG = "ContratoPagerActivity";
     private static final String EXTRA_CONTRACT_LIST = "br.gov.am.tce.auditor.contractList";
 
-    private ViewPager mViewPager;
     private List<Contrato> mContracts = new ArrayList<>();
 
     public static Intent newIntent(Context context, List<Contrato> contracts) {
@@ -41,9 +40,9 @@ public class ContratoPagerActivity extends AppCompatActivity {
 
         mContracts = getIntent().getParcelableArrayListExtra(EXTRA_CONTRACT_LIST);
 
-        mViewPager = findViewById(R.id.contract_view_pager);
+        ViewPager viewPager = findViewById(R.id.contract_view_pager);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 Contrato contract = mContracts.get(position);

@@ -10,10 +10,14 @@
     <string name="sign_in">Sign In</string>
     <string name="check_server">Download</string>
     <string name="search">Procurar</string>
+    <string name="galerie">Galeria</string>
+    <string name="localDB">local DB</string>
+    <string name="vizinhanca">vizinhança</string>
     <string name="exercicio">Exercício:</string>
     <string name="municipio">Município:</string>
     <string name="jurisdicionado">Jurisdicionado:</string>
     <string name="buscar_contratos_btn">Buscar Contratos</string>
+    <string name="buscar_benspublicos_btn">Buscar Bens Publicos</string>
     <string name="id">Id:</string>
     <string name="numero">Numero:</string>
     <string name="prazo">Prazo:</string>

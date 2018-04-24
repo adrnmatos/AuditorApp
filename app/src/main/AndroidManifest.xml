@@ -20,7 +20,7 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".MainActivity">
+            android:name=".EntryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -30,8 +30,36 @@
         <activity android:name=".SignInActivity"
             android:label="Login"/>
 
-        <activity android:name=".PhotoListActivity"
-            android:label="Photo List"/>
+        <activity android:name=".MainActivity"/>
+
+        <activity android:name=".SearchActivity"
+            android:label="Pesquisa"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity android:name=".SearchBensPublicosActivity"
+            android:label="Pesquisa"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity android:name=".SearchContratosActivity"
+            android:label="Pesquisa"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity android:name=".BemPublicoPagerActivity"
+            android:label="@string/bem_publico"/>
+
+        <activity android:name=".BemPublicoActivity"
+            android:label="Bem Público"/>
+
+        <activity android:name=".ContratoPagerActivity"
+            android:label="Contrato"/>
+
+        <activity android:name=".ContratoActivity"
+            android:label="Contrato"/>
+
+        <activity android:name=".MedicaoActivity"
+            android:label="Medicao"/>
+
+        <activity android:name=".PhotoListActivity"/>
 
         <activity android:name=".PhotoActivity"
             android:parentActivityName=".PhotoListActivity"
@@ -40,21 +68,6 @@
         <activity android:name=".MapsActivity"
             android:parentActivityName=".PhotoListActivity"
             android:label="Mapa"/>
-
-        <activity android:name=".SearchActivity"
-            android:label="Pesquisa"/>
-
-        <activity android:name=".ContratoPagerActivity"
-            android:label="Contrato"/>
-
-        <activity android:name=".BemPublicoActivity"
-            android:label="Bem Público"/>
-
-        <activity android:name=".ContratoActivity"
-            android:label="Contrato"/>
-
-        <activity android:name=".MedicaoActivity"
-            android:label="Medicao"/>
 
         <provider
             android:authorities="br.gov.am.tce.auditor.fileProvider"

@@ -1,96 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:layout_editor_absoluteY="81dp">
-
-    <android.support.constraint.Guideline
-        android:id="@+id/searchGuide1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.052083332" />
-
-    <TextView
-        android:id="@+id/searchLabel1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/exercicio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintStart_toStartOf="@+id/searchGuide1"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/searchLabel2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/municipio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintStart_toStartOf="@+id/searchGuide1"
-        app:layout_constraintTop_toBottomOf="@+id/searchLabel1" />
-
-    <TextView
-        android:id="@+id/searchLabel3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/jurisdicionado"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintStart_toStartOf="@+id/searchGuide1"
-        app:layout_constraintTop_toBottomOf="@+id/searchLabel2" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/searchGuide2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5572917" />
-
-    <Spinner
-        android:id="@+id/searchExercicio_SPN"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/searchGuide2"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Spinner
-        android:id="@+id/searchMunicipio_SPN"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/searchGuide2"
-        app:layout_constraintTop_toBottomOf="@+id/searchExercicio_SPN" />
-
-    <Spinner
-        android:id="@+id/searchJurisdicionado_SPN"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/searchGuide2"
-        app:layout_constraintTop_toBottomOf="@+id/searchMunicipio_SPN" />
+    android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/searchBuscarContratos_BTN"
+        android:id="@+id/searchBtn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/buscar_contratos_btn"
-        app:layout_constraintEnd_toStartOf="@+id/searchGuide3"
-        app:layout_constraintTop_toBottomOf="@+id/searchJurisdicionado_SPN" />
+        android:text="@string/bem_publico"
+        android:onClick="buscarBensPublicos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/searchGuide3"
+    <Button
+        android:id="@+id/searchBtn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9557292" />
-
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/buscar_contrato_btn"
+        android:onClick="buscarContratos"
+        app:layout_constraintStart_toEndOf="@+id/searchBtn1"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

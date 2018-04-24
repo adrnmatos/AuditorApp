@@ -203,7 +203,7 @@ public class PhotoListFragment extends Fragment {
                 DownloadPhotos(photosDBReference);
                 return true;
             case R.id.search:
-                Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
+                Intent searchIntent = new Intent(getActivity(), SearchContratosActivity.class);
                 startActivity(searchIntent);
                 return true;
             default:
@@ -211,7 +211,8 @@ public class PhotoListFragment extends Fragment {
         }
     }
 
-    private void DownloadPhotos(DatabaseReference reference) {
+    // ************************  SERVER PHOTOS DOWNLOAD **********************//
+    private void DownloadPhotos(final DatabaseReference reference) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -219,10 +220,14 @@ public class PhotoListFragment extends Fragment {
                     if(dataSnapshot.getChildrenCount() != 0) {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             String itemId = child.getKey();
-                            PhotoLab photoLab = PhotoLab.get(getActivity());
-                            if(photoLab.getPhoto(itemId) == null) {
-                                Photo newPhoto = child.getValue(Photo.class);
-                                getImageFromServer(newPhoto);
+                            if(child.hasChild("bemPublico")) {
+                                PhotoLab photoLab = PhotoLab.get(getActivity());
+                                if(photoLab.getPhoto(itemId) == null) {
+                                    Photo newPhoto = child.getValue(Photo.class);
+                                    getImageFromServer(newPhoto);
+                                }
+                            } else {
+                                DownloadPhotos(reference.child(itemId));
                             }
                         }
                     }
@@ -233,10 +238,6 @@ public class PhotoListFragment extends Fragment {
                 Log.e(TAG, "Failed on reading database: " + databaseError.toException());
             }
         });
-    }
-
-    private void recurOnChildren() {
-
     }
 
     private void getImageFromServer(final Photo photo) {

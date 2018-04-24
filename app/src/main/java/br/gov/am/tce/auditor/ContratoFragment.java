@@ -33,14 +33,14 @@ import br.gov.am.tce.auditor.helpers.PhotoLab;
 
 public class ContratoFragment extends Fragment {
     private static final String TAG = "ContratoFragment";
-    private static final String ARG_CONTRACT = "contract_argument";
+    private static final String CONTRATO_ARG = "contract_argument";
     private Contrato contrato = null;
     private Medicao selectedMedicao;
 
     public static Fragment newInstance(Contrato contract) {
         Fragment fragment = new ContratoFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(ARG_CONTRACT, contract);
+        bundle.putParcelable(CONTRATO_ARG, contract);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -51,7 +51,7 @@ public class ContratoFragment extends Fragment {
         Bundle bundle = getArguments();
         setHasOptionsMenu(true);
 
-        contrato = bundle.getParcelable(ARG_CONTRACT);
+        contrato = bundle.getParcelable(CONTRATO_ARG);
         AuditorPreferences.setContrato(getActivity(), contrato.getNumero());
         AuditorPreferences.setMedicao(getActivity(), null);
     }
@@ -59,7 +59,6 @@ public class ContratoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_contract, container, false);
 
         TextView ctId_tv = v.findViewById(R.id.CTId_TV);
