@@ -107,9 +107,11 @@ public class Contrato implements Parcelable {
         return medicaoLista;
     }
 
+/*
     public void setMedicaoLista(List<Medicao> medicaoLista) {
         this.medicaoLista = medicaoLista;
     }
+*/
 
     @Override
     public String toString() {

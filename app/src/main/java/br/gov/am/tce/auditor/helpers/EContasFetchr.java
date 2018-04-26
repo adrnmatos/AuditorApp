@@ -60,7 +60,7 @@ public class EContasFetchr {
                     .appendQueryParameter("arguments", argumentStr)
                     .build().toString();
             // String jsonStringBensPublicos = getUrlString(url);
-            String jsonStringBensPublicos = "{\"benspublicos\":[\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contratos\":[{\"id\":\"123\"}]}}}";
+            String jsonStringBensPublicos = "{\"benspublicos\":[{\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contratos\":[{\"contrato\":{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}}]}}]}";
             JSONObject jsonBody = new JSONObject(jsonStringBensPublicos);
             parseBensPublicos(bemPublicoList, jsonBody);
         } catch (IOException ioe) {
@@ -79,7 +79,7 @@ public class EContasFetchr {
                     .appendQueryParameter("arguments", bemPublico_str)
                     .build().toString();
             // String jsonStringBemPublico = getUrlString(url);
-            String jsonStringBemPublico = "{\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contrato\":[{\"id\":\"123\"},{\"id\":\"456\"}]}}";
+            String jsonStringBemPublico = "{\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contratos\":[{\"contrato\":{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}}]}}";
             JSONObject jsonBody = new JSONObject(jsonStringBemPublico);
             bemPublico =  parseBemPublico(jsonBody);
         } catch (IOException ioe) {
@@ -93,9 +93,9 @@ public class EContasFetchr {
     private void parseBensPublicos(List<BemPublico> bensPublicosList, JSONObject jsonBody)
             throws IOException, JSONException {
 
-            JSONArray bemPublicoJSONArray = jsonBody.getJSONArray("bensPublicos");
-            for(int i = 0; i < bemPublicoJSONArray.length(); i++) {
-                bensPublicosList.add(parseBemPublico(bemPublicoJSONArray.getJSONObject(i)));
+            JSONArray bensPublicosJSONArray = jsonBody.getJSONArray("benspublicos");
+            for(int i = 0; i < bensPublicosJSONArray.length(); i++) {
+                bensPublicosList.add(parseBemPublico(bensPublicosJSONArray.getJSONObject(i)));
             }
     }
 
@@ -113,12 +113,9 @@ public class EContasFetchr {
         bemPublico.setJurisdicionado(bempublicoJsonObject.getString("jurisdicionado"));
         bemPublico.setEndereco(bempublicoJsonObject.getString("endereco"));
         if(bempublicoJsonObject.has("contratos")) {
-            JSONArray contratoJsonArray = bempublicoJsonObject.getJSONArray("contratos");
-            for(int i = 0; i < contratoJsonArray.length(); i++) {
-                JSONObject contratoJsonObject = contratoJsonArray.getJSONObject(i);
-                Contrato contrato = new Contrato();
-                contrato.setId(contratoJsonObject.getString("id"));
-                bemPublico.getContratos().add(contrato);
+            JSONArray contratosJsonArray = bempublicoJsonObject.getJSONArray("contratos");
+            for(int i = 0; i < contratosJsonArray.length(); i++) {
+                bemPublico.getContratos().add(parseContrato(contratosJsonArray.getJSONObject(i)));
             }
         }
         return bemPublico;

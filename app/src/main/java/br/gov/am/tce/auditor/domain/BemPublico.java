@@ -131,8 +131,10 @@ public class BemPublico implements Parcelable {
         return contratoLista;
     }
 
+/*
     public void setContratos(List<Contrato> contratoLista) {
         this.contratoLista = contratoLista;
     }
+*/
 
 }

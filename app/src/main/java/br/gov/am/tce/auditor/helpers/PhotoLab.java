@@ -95,6 +95,48 @@ public class PhotoLab {
         }
     }
 
+    public List<String> selectDistinctBensPublicos() {
+        List<String> distintos = new ArrayList<>();
+
+        Cursor cursor = mDatabase.query(true, PhotoTable.NAME, new String[] { PhotoTable.Cols.BEMPUBLICO }, null, null, PhotoTable.Cols.BEMPUBLICO, null, null, null);
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+                distintos.add(cursor.getString(0));
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return distintos;
+
+
+    }
+
+    public List<Photo> searchPhotos(/*String autor,*/String bemPublico, String contrato, String medicao) {
+        List<Photo> photos = new ArrayList<>();
+
+        PhotoCursorWrapper cursor = queryPhotos(
+                PhotoTable.Cols.BEMPUBLICO + " = ? AND " +
+                PhotoTable.Cols.CONTRATO + " = ? ",
+//                PhotoTable.Cols.MEDICAO + " = ?",
+                new String[] { bemPublico, contrato }
+        );
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+                Photo photo = cursor.getPhoto();
+                photos.add(photo);
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return photos;
+    }
+
     public File getPhotoFile(Photo photo) {
         File filesDir = mContext.getFilesDir();
         return new File(filesDir, photo.getPhotoFilename());

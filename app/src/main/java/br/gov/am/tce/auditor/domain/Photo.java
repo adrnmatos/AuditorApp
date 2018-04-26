@@ -41,6 +41,10 @@ public class Photo implements Parcelable {
     private String mBemPublico;
     private String mContrato;
     private String mMedicao;
+    /* TODO: attach user to photo */
+    /* private Usuario user;
+    *  public Usuario getUser();
+    *  public void setUser(Usuario user); */
 
     private static final DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     private static final StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,10 +74,30 @@ public class PhotoListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_photo_list, container, false);
+
+        FloatingActionButton fab = v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Photo photo = new Photo();
+                PhotoLab.get(getActivity()).addPhoto(photo);
+                Intent intent = PhotoActivity.newIntent(getActivity(), photo.getId());
+                startActivity(intent);
+            }
+        });
+
         mPhotoRecyclerView = v.findViewById(R.id.photo_recycler_view);
         mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+
+        List<String> distintos = PhotoLab.get(getActivity()).selectDistinctBensPublicos();
+
+        //List<Photo> photos = PhotoLab.get(getActivity()).searchPhotos("PNT321", "123", null);
+
+
+
         updateUI();
         return v;
+
     }
 
     @Override
@@ -182,12 +203,6 @@ public class PhotoListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.new_photo:
-                Photo photo = new Photo();
-                PhotoLab.get(getActivity()).addPhoto(photo);
-                Intent intent = PhotoActivity.newIntent(getActivity(), photo.getId());
-                startActivity(intent);
-                return true;
             case R.id.map_photo:
                 if(mSelectedPhotosList.size() != 0) {
                     Intent mapIntent = MapsActivity.newIntent(getActivity(), mSelectedPhotosList);

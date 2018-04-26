@@ -248,6 +248,9 @@ public class PhotoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_photo:
+                /*
+                * if(photo.getAuthor() != AuditorPreferences.getUsername(this)) return false;
+                * */
                 PhotoLab.get(this).deletePhoto(mPhoto);
                 /* TODO: to check if there is missing file on filesystem and still need to delete it */
                 finish();
