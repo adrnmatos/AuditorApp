@@ -1,8 +1,10 @@
 package br.gov.am.tce.auditor;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -47,12 +49,16 @@ import static android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class PhotoListFragment extends Fragment {
     private static final String TAG = "PhotoListFragment";
+    private static final int FILTER_REQUEST = 0;
+    private static final String EXTRA_PHOTO_LIST = "br.gov.am.tce.auditor.extra_photo_list";
     private static final String PHOTOS = "photos";
+
     private DatabaseReference photosDBReference = FirebaseDatabase.getInstance().getReference().child(PHOTOS);
 
     private RecyclerView mPhotoRecyclerView;
     private PhotoAdapter mAdapter;
     private List<Photo> mSelectedPhotosList = new ArrayList<>();
+    private List<Photo> mDisplayedPhotoList = new ArrayList<>();
 
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
@@ -89,27 +95,18 @@ public class PhotoListFragment extends Fragment {
         mPhotoRecyclerView = v.findViewById(R.id.photo_recycler_view);
         mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
-        List<String> distintos = PhotoLab.get(getActivity()).selectDistinctBensPublicos();
-
-        //List<Photo> photos = PhotoLab.get(getActivity()).searchPhotos("PNT321", "123", null);
-
-
-
-        updateUI();
+        mDisplayedPhotoList = PhotoLab.get(getActivity()).getPhotos();
+        updateUI(mDisplayedPhotoList);
         return v;
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        updateUI(mDisplayedPhotoList);
     }
 
-    private void updateUI() {
-        PhotoLab photoLab = PhotoLab.get(getActivity());
-        List<Photo> photos = photoLab.getPhotos();
-
+    private void updateUI(List<Photo> photos) {
         if(mAdapter == null) {
             mAdapter = new PhotoAdapter(photos);
             mPhotoRecyclerView.setAdapter(mAdapter);
@@ -203,6 +200,10 @@ public class PhotoListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.filter_photos:
+                Intent intent = new Intent(getActivity(), FilterActivity.class);
+                startActivityForResult(intent, FILTER_REQUEST);
+                return true;
             case R.id.map_photo:
                 if(mSelectedPhotosList.size() != 0) {
                     Intent mapIntent = MapsActivity.newIntent(getActivity(), mSelectedPhotosList);
@@ -223,6 +224,20 @@ public class PhotoListFragment extends Fragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if(requestCode == FILTER_REQUEST) {
+            if(data == null) {
+                return;
+            }
+            mDisplayedPhotoList = data.getParcelableArrayListExtra(EXTRA_PHOTO_LIST);
+            updateUI(mDisplayedPhotoList);
         }
     }
 
@@ -264,7 +279,6 @@ public class PhotoListFragment extends Fragment {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     photoLab.addPhoto(photo);
-                    updateUI();
                     Log.d(TAG, "Successfully downloaded photo: " + photo.getId());
                 }
             })
@@ -280,7 +294,6 @@ public class PhotoListFragment extends Fragment {
         for (final Photo photo: mSelectedPhotosList) {
             photo.registerItselfToDBServer(getActivity());
         }
-        updateUI();
     }
 
 }

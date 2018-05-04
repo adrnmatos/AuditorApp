@@ -61,6 +61,8 @@
 
         <activity android:name=".PhotoListActivity"/>
 
+        <activity android:name=".FilterActivity"/>
+
         <activity android:name=".PhotoActivity"
             android:parentActivityName=".PhotoListActivity"
             android:label="Foto"/>

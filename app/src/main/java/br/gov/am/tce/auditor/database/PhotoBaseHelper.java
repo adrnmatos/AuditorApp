@@ -22,14 +22,15 @@ public class PhotoBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + PhotoTable.NAME + "(" +
             " _id integer primary key autoincrement, " +
-            PhotoTable.Cols.UUID + ", " +
-            PhotoTable.Cols.TITLE + ", " +
-            PhotoTable.Cols.LATITUDE + ", " +
-            PhotoTable.Cols.LONGITUDE + ", " +
-            PhotoTable.Cols.TIME + ", " +
-            PhotoTable.Cols.BEMPUBLICO + ", " +
-            PhotoTable.Cols.CONTRATO + ", " +
-            PhotoTable.Cols.MEDICAO + ")"
+                PhotoTable.Cols.UUID + ", " +
+                //PhotoTable.Cols.AUTOR + ", " +
+                PhotoTable.Cols.TITLE + ", " +
+                PhotoTable.Cols.LATITUDE + ", " +
+                PhotoTable.Cols.LONGITUDE + ", " +
+                PhotoTable.Cols.TIME + ", " +
+                PhotoTable.Cols.BEMPUBLICO + ", " +
+                PhotoTable.Cols.CONTRATO + ", " +
+                PhotoTable.Cols.MEDICAO + ")"
         );
     }
 

@@ -8,6 +8,11 @@
     <string name="map_photo_list_menu">Mapa</string>
     <string name="upload_photo_list_menu">Upload</string>
     <string name="sign_in">Sign In</string>
+    <string name="filter">Filtrar</string>
+    <string name="author">Autor</string>
+    <string name="bemPublico">Bem Publico</string>
+    <string name="contract">Contrato</string>
+    <string name="medicao">Medição</string>
     <string name="check_server">Download</string>
     <string name="search">Procurar</string>
     <string name="galerie">Galeria</string>

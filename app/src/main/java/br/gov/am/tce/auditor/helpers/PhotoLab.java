@@ -95,21 +95,21 @@ public class PhotoLab {
         }
     }
 
-    public List<String> selectDistinctBensPublicos() {
-        List<String> distintos = new ArrayList<>();
+    public List<String> selectDistinctAtributeValues(String atributeName) {
+        List<String> distincts = new ArrayList<>();
 
-        Cursor cursor = mDatabase.query(true, PhotoTable.NAME, new String[] { PhotoTable.Cols.BEMPUBLICO }, null, null, PhotoTable.Cols.BEMPUBLICO, null, null, null);
+        Cursor cursor = mDatabase.query(true, PhotoTable.NAME, new String[] { atributeName }, null, null, atributeName, null, null, null);
 
         try {
             cursor.moveToFirst();
             while(!cursor.isAfterLast()) {
-                distintos.add(cursor.getString(0));
+                distincts.add(cursor.getString(0));
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
-        return distintos;
+        return distincts;
 
 
     }
@@ -119,9 +119,9 @@ public class PhotoLab {
 
         PhotoCursorWrapper cursor = queryPhotos(
                 PhotoTable.Cols.BEMPUBLICO + " = ? AND " +
-                PhotoTable.Cols.CONTRATO + " = ? ",
-//                PhotoTable.Cols.MEDICAO + " = ?",
-                new String[] { bemPublico, contrato }
+                PhotoTable.Cols.CONTRATO + " = ? AND " +
+                PhotoTable.Cols.MEDICAO + " = ?",
+                new String[] { bemPublico, contrato, medicao }
         );
 
         try {
