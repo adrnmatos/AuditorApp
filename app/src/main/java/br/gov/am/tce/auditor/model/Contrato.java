@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor.domain;
+package br.gov.am.tce.auditor.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

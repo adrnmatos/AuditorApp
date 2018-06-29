@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;
-import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.model.Photo;
 
 /**
  * Created by adrnm on 24/10/2017.

@@ -4,41 +4,40 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import br.gov.am.tce.auditor.domain.BemPublico;
-import br.gov.am.tce.auditor.domain.Contrato;
-import br.gov.am.tce.auditor.domain.Photo;
-import br.gov.am.tce.auditor.helpers.AuditorPreferences;
-import br.gov.am.tce.auditor.helpers.EContasFetchr;
-import br.gov.am.tce.auditor.helpers.PhotoLab;
+import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.model.BemPublico;
+import br.gov.am.tce.auditor.model.Contrato;
+import br.gov.am.tce.auditor.model.Photo;
+import br.gov.am.tce.auditor.service.EContasFetchr;
+import br.gov.am.tce.auditor.service.PhotoLab;
 
 /**
  * Created by Adriano on 28/03/2018.
  */
 
 public class BemPublicoFragment extends Fragment {
-    private static final String TAG = "br.gov.am.tce.auditor.BemPublicoFragment";
-    private static final String BEMPUBLICO_ARG = "bemPublico_extra";
+    private static final String ARG_BEM_PUBLICO = "bemPublico_arg";
+    private static final String ARG_IS_EDITING = "isEditing_arg";
 
-    private BemPublico bemPublico = null;
+    private BemPublico mBemPublico = null;
+    private boolean isEditing;
     private Contrato selectedContract;
 
-    public static Fragment newInstance(BemPublico bemPublico) {
+    public static Fragment newInstance(BemPublico bemPublico, boolean isEditing) {
         Fragment fragment = new BemPublicoFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BEMPUBLICO_ARG, bemPublico);
+        bundle.putParcelable(ARG_BEM_PUBLICO, bemPublico);
+        bundle.putBoolean(ARG_IS_EDITING, isEditing);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -46,13 +45,10 @@ public class BemPublicoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        setHasOptionsMenu(true);
 
-        bemPublico = bundle.getParcelable(BEMPUBLICO_ARG);
-        AuditorPreferences.setBemPublico(getActivity(), bemPublico.getId());
-        AuditorPreferences.setContrato(getActivity(), null);
-        AuditorPreferences.setMedicao(getActivity(), null);
+        Bundle bundle = getArguments();
+        mBemPublico = bundle.getParcelable(ARG_BEM_PUBLICO);
+        isEditing = bundle.getBoolean(ARG_IS_EDITING);
     }
 
     @Nullable
@@ -61,31 +57,31 @@ public class BemPublicoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_bempublico, container, false);
 
         TextView bpId_tv = v.findViewById(R.id.BPId_TV);
-        bpId_tv.setText(bemPublico.getId());
+        bpId_tv.setText(mBemPublico.getId());
 
         TextView bpArea_tv = v.findViewById(R.id.BPArea_TV);
-        bpArea_tv.setText(bemPublico.getArea());
+        bpArea_tv.setText(mBemPublico.getArea());
 
         TextView bpLatitude_tv = v.findViewById(R.id.BPLatitude_TV);
-        bpLatitude_tv.setText(bemPublico.getLatitude());
+        bpLatitude_tv.setText(mBemPublico.getLatitude());
 
         TextView bpLongitude_tv = v.findViewById(R.id.BPLongitude_TV);
-        bpLongitude_tv.setText(bemPublico.getLongitude());
+        bpLongitude_tv.setText(mBemPublico.getLongitude());
 
         TextView bpTipo_tv = v.findViewById(R.id.BPTipo_TV);
-        bpTipo_tv.setText(bemPublico.getTipo());
+        bpTipo_tv.setText(mBemPublico.getTipo());
 
         TextView bpNome_tv = v.findViewById(R.id.BPNome_TV);
-        bpNome_tv.setText(bemPublico.getNome());
+        bpNome_tv.setText(mBemPublico.getNome());
 
         TextView bpJurisdicionado_tv = v.findViewById(R.id.BPJurisdicionado_TV);
-        bpJurisdicionado_tv.setText(bemPublico.getJurisdicionado());
+        bpJurisdicionado_tv.setText(mBemPublico.getJurisdicionado());
 
         TextView bpEndereco_tv = v.findViewById(R.id.BPEndereco_TV);
-        bpEndereco_tv.setText(bemPublico.getEndereco());
+        bpEndereco_tv.setText(mBemPublico.getEndereco());
 
         Spinner bpContratos_spn = v.findViewById(R.id.BPContratos_SPN);
-        ArrayAdapter<Contrato> contratosAdapter = new ArrayAdapter<Contrato>(getActivity(), android.R.layout.simple_spinner_item, bemPublico.getContratos());
+        ArrayAdapter<Contrato> contratosAdapter = new ArrayAdapter<Contrato>(getActivity(), android.R.layout.simple_spinner_item, mBemPublico.getContratos());
         contratosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bpContratos_spn.setAdapter(contratosAdapter);
 
@@ -101,49 +97,26 @@ public class BemPublicoFragment extends Fragment {
             }
         });
 
-        Button bpFetchContrato_btn = v.findViewById(R.id.BPFetchContrato_BTN);
-        bpFetchContrato_btn.setOnClickListener(new View.OnClickListener() {
+        if(!isEditing) {
+            FloatingActionButton fab = v.findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FindContextHandler.get().onFABClick(getActivity());
+                }
+            });
+        }
+
+        v.findViewById(R.id.BPFetchContrato_BTN).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FetchContratoTask().execute(selectedContract.getId());
+                FindContextHandler.get().initCTFetch(getActivity(), selectedContract.getBemPublico(),
+                        selectedContract.getId());
             }
         });
 
         return v;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.photo_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.ic_photo:
-                Photo photo = new Photo();
-                photo.setBemPublico(bemPublico.getId());
-                PhotoLab.get(getActivity()).addPhoto(photo);
-                Intent intent = PhotoActivity.newIntent(getActivity(), photo.getId());
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private class FetchContratoTask extends AsyncTask<String, Void, Contrato> {
-        @Override
-        protected Contrato doInBackground(String... args) {
-            String contractId = args[0];
-            return new EContasFetchr().fetchContrato(contractId);
-        }
-
-        @Override
-        protected void onPostExecute(Contrato contrato) {
-            Intent intent = ContratoActivity.newIntent(getActivity(), contrato);
-            startActivity(intent);
-        }
-    }
 }

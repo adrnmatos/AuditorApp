@@ -37,7 +37,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import br.gov.am.tce.auditor.helpers.AuditorPreferences;
+import br.gov.am.tce.auditor.service.AuditorPreferences;
 
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -112,7 +112,7 @@ public class SignInActivity extends AppCompatActivity implements
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            AuditorPreferences.setUsername(SignInActivity.this, acct.getDisplayName());
+                            AuditorPreferences.setUsername(SignInActivity.this.getApplicationContext(), acct.getDisplayName());
                             startActivity(new Intent(SignInActivity.this, MainActivity.class));
                             finish();
                         }

@@ -50,6 +50,7 @@
         android:layout_height="35dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:visibility="invisible"
         android:onClick="onClearButtonClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PHAuthor_TV"
@@ -87,5 +88,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/photo_photo_view"
         app:layout_constraintEnd_toEndOf="@+id/photo_photo_view"
         app:layout_constraintStart_toStartOf="@+id/photo_photo_view" />
+
+    <ImageButton
+        android:id="@+id/PHSearch_BTN"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        android:onClick="onSearchButtonClick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PHAuthor_TV"
+        app:srcCompat="@android:drawable/ic_menu_search" />
 
 </android.support.constraint.ConstraintLayout>

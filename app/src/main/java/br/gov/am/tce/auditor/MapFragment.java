@@ -19,18 +19,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.model.Photo;
 
-public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private static final String ARG_PHOTOS = "photo_list";
 
     private List<Photo> photoList;
     private GoogleMap mMap;
 
-    public static MapsFragment newInstance(List<Photo> photoList) {
+    public static MapFragment newInstance(List<Photo> photoList) {
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PHOTOS, (ArrayList<? extends Parcelable>) photoList);
-        MapsFragment fragment = new MapsFragment();
+        MapFragment fragment = new MapFragment();
         fragment.setArguments(args);
         return fragment;
     }

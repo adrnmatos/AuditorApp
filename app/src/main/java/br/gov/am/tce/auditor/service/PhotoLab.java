@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor.helpers;
+package br.gov.am.tce.auditor.service;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,7 +12,7 @@ import java.util.List;
 import br.gov.am.tce.auditor.database.PhotoBaseHelper;
 import br.gov.am.tce.auditor.database.PhotoCursorWrapper;
 import br.gov.am.tce.auditor.database.PhotoDbSchema.PhotoTable;
-import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.model.Photo;
 
 /**
  * Created by adrnm on 24/10/2017.
@@ -114,7 +114,7 @@ public class PhotoLab {
 
     }
 
-    public List<Photo> searchPhotos(/*String autor,*/String bemPublico, String contrato, String medicao) {
+    public List<Photo> searchPhotos(String author, String bemPublico, String contrato, String medicao) {
         List<Photo> photos = new ArrayList<>();
 
         PhotoCursorWrapper cursor = queryPhotos(

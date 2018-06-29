@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
  * Created by adrnm on 12/10/2017.
  */
 
-public class PhotoListActivity extends SingleFragmentActivity {
+public class PhotoGridActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return PhotoListFragment.newInstance();
+        return PhotoGridFragment.newInstance();
     }
 
 }

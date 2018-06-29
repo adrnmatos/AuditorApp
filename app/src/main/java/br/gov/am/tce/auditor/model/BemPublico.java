@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor.domain;
+package br.gov.am.tce.auditor.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -131,10 +131,8 @@ public class BemPublico implements Parcelable {
         return contratoLista;
     }
 
-/*
     public void setContratos(List<Contrato> contratoLista) {
         this.contratoLista = contratoLista;
     }
-*/
 
 }

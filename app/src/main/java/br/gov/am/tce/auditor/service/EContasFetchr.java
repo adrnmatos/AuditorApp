@@ -1,4 +1,4 @@
-package br.gov.am.tce.auditor.helpers;
+package br.gov.am.tce.auditor.service;
 
 import android.net.Uri;
 import android.util.Log;
@@ -15,9 +15,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.domain.BemPublico;
-import br.gov.am.tce.auditor.domain.Contrato;
-import br.gov.am.tce.auditor.domain.Medicao;
+import br.gov.am.tce.auditor.model.BemPublico;
+import br.gov.am.tce.auditor.model.Contrato;
+import br.gov.am.tce.auditor.model.Medicao;
 
 /**
  * Created by Adriano on 12/03/2018.
@@ -42,22 +42,11 @@ public class EContasFetchr {
     public List<BemPublico> fetchBensPublicos(String municipio, String jurisdicionado) {
         List<BemPublico> bemPublicoList = new ArrayList<>();
 
-        String argumentStr = null;
-        if(municipio != null) {
-            argumentStr += municipio;
-            if(jurisdicionado != null) {
-                argumentStr += "&" + jurisdicionado;
-            }
-        } else {
-            if(jurisdicionado != null) {
-                argumentStr += jurisdicionado;
-            }
-        }
-
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_BEMPUBLICO)
-                    .appendQueryParameter("arguments", argumentStr)
+                    .appendQueryParameter("municipio", municipio)
+                    .appendQueryParameter("jurisdicionado", jurisdicionado)
                     .build().toString();
             // String jsonStringBensPublicos = getUrlString(url);
             String jsonStringBensPublicos = "{\"benspublicos\":[{\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contratos\":[{\"contrato\":{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}}]}}]}";
@@ -71,23 +60,23 @@ public class EContasFetchr {
         return bemPublicoList;
     }
 
-    public BemPublico fetchBemPublico(String bemPublico_str) {
-        BemPublico bemPublico = null;
+    public List<BemPublico> fetchBemPublico(String bpID) {
+        List<BemPublico> bemPublicoList = new ArrayList<>();
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_BEMPUBLICO)
-                    .appendQueryParameter("arguments", bemPublico_str)
+                    .appendQueryParameter("bpID", bpID)
                     .build().toString();
             // String jsonStringBemPublico = getUrlString(url);
             String jsonStringBemPublico = "{\"bempublico\":{\"id\":\"EE11491\",\"area\":\"250\",\"latitude\":\"121345\",\"longitude\":\"458734\",\"tipo\":\"edificacao\",\"nome\":\"escola estadual nossa senhora das gracas\",\"jurisdicionado\":\"SEDUC\",\"endereco\":\"rua 1 numero 35 manaus amazonas\",\"contratos\":[{\"contrato\":{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}}]}}";
             JSONObject jsonBody = new JSONObject(jsonStringBemPublico);
-            bemPublico =  parseBemPublico(jsonBody);
+            parseBemPublico(bemPublicoList, jsonBody);
         } catch (IOException ioe) {
             Log.e(TAG, ioe.getMessage());
         } catch (JSONException jse) {
             Log.e(TAG, jse.getMessage());
         }
-        return bemPublico;
+        return bemPublicoList;
     }
 
     private void parseBensPublicos(List<BemPublico> bensPublicosList, JSONObject jsonBody)
@@ -95,11 +84,11 @@ public class EContasFetchr {
 
             JSONArray bensPublicosJSONArray = jsonBody.getJSONArray("benspublicos");
             for(int i = 0; i < bensPublicosJSONArray.length(); i++) {
-                bensPublicosList.add(parseBemPublico(bensPublicosJSONArray.getJSONObject(i)));
+                parseBemPublico(bensPublicosList, bensPublicosJSONArray.getJSONObject(i));
             }
     }
 
-    private BemPublico parseBemPublico(JSONObject jsonBody)
+    private void parseBemPublico(List<BemPublico> bensPublicosList, JSONObject jsonBody)
             throws IOException, JSONException {
 
         JSONObject bempublicoJsonObject = jsonBody.getJSONObject("bempublico");
@@ -115,10 +104,12 @@ public class EContasFetchr {
         if(bempublicoJsonObject.has("contratos")) {
             JSONArray contratosJsonArray = bempublicoJsonObject.getJSONArray("contratos");
             for(int i = 0; i < contratosJsonArray.length(); i++) {
-                bemPublico.getContratos().add(parseContrato(contratosJsonArray.getJSONObject(i)));
+                List<Contrato> contratoList = new ArrayList<>();
+                parseContrato(contratoList, contratosJsonArray.getJSONObject(i));
+                bemPublico.setContratos(contratoList);
             }
         }
-        return bemPublico;
+        bensPublicosList.add(bemPublico);
     }
 
 
@@ -126,23 +117,12 @@ public class EContasFetchr {
     public List<Contrato> fetchContratos(String municipio, String jurisdicionado, String exercicio) {
         List<Contrato> contratoList = new ArrayList<>();
 
-        String argumentStr = null;
-        if(municipio != null) {
-            argumentStr += municipio;
-            if(jurisdicionado != null) argumentStr += "&" + jurisdicionado;
-            if(exercicio != null) argumentStr += "&" + exercicio;
-        } else {
-            if(jurisdicionado != null) {
-                argumentStr += jurisdicionado;
-                if(exercicio != null) argumentStr += "&" + exercicio;
-            }
-            argumentStr += exercicio;
-        }
-
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_CONTRATO)
-                    .appendQueryParameter("arguments", argumentStr)
+                    .appendQueryParameter("municipio", municipio)
+                    .appendQueryParameter("jurisdicionado", jurisdicionado)
+                    .appendQueryParameter("exercicio", exercicio)
                     .build().toString();
             // String jsonStringContratos = getUrlString(url);
             String jsonStringContratos = "{\"contratos\":[{\"contrato\":{\"id\":\"123\",\"numero\":\"456/2018\",\"prazo\":\"360\",\"dataInicio\":\"05/01/2018\",\"bemPublico\":\"PNT321\",\"contratado\":\"OAS Engenharia\"}},{\"contrato\":{\"id\":\"456\",\"numero\":\"13/2007\",\"prazo\":\"180\",\"dataInicio\":\"21/05/2007\",\"bemPublico\":\"EE11491\",\"contratado\":\"Oderbreach Engenharia\",\"medicoes\":[{\"id\":\"12\",\"numero\":\"1234\",\"dataInicio\":\"12/08/2009\",\"dataFim\":\"14/12/2009\",\"contratoId\":\"123\"}]}},{\"contrato\":{\"id\":\"789\",\"numero\":\"458/2009\",\"prazo\":\"270\",\"dataInicio\":\"12/09/2009\",\"bemPublico\":\"HH42\",\"contratado\":\"Mendes Junior Engenharia\"}},{\"contrato\":{\"id\":\"012\",\"numero\":\"25/2011\",\"prazo\":\"45\",\"dataInicio\":\"31/08/2011\",\"bemPublico\":\"PS875\",\"contratado\":\"Carrane Engenharia\"}}]}";
@@ -156,23 +136,24 @@ public class EContasFetchr {
         return contratoList;
     }
 
-    public Contrato fetchContrato(String contractId) {
-        Contrato contrato = null;
+    public List<Contrato> fetchContrato(String bpID, String ctID) {
+        List<Contrato> contratoList = new ArrayList<>();
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_CONTRATO)
-                    .appendQueryParameter("arguments", contractId)
+                    .appendQueryParameter("bpID", bpID)
+                    .appendQueryParameter("ctID", ctID)
                     .build().toString();
             // String jsonStringContrato = getUrlString(url);
-            String jsonStringContrato = "{\"contrato\":{\"id\":\"456\",\"numero\":\"13/2007\",\"prazo\":\"180\",\"dataInicio\":\"21/05/2007\",\"bemPublico\":\"EE11491\",\"contratado\":\"Oderbreach Engenharia\",\"medicao\":[{\"id\":\"12\",\"numero\":\"1234\",\"dataInicio\":\"12/08/2009\",\"dataFim\":\"14/12/2009\",\"contratoId\":\"123\"}]}}";
+            String jsonStringContrato = "{\"contrato\":{\"id\":\"456\",\"numero\":\"13/2007\",\"prazo\":\"180\",\"dataInicio\":\"21/05/2007\",\"bemPublico\":\"EE11491\",\"contratado\":\"Oderbreach Engenharia\",\"medicoes\":[{\"id\":\"12\",\"numero\":\"1234\",\"dataInicio\":\"12/08/2009\",\"dataFim\":\"14/12/2009\",\"contratoId\":\"123\"}]}}";
             JSONObject jsonBody = new JSONObject(jsonStringContrato);
-            contrato = parseContrato(jsonBody);
+            parseContrato(contratoList, jsonBody);
         } catch (IOException ioe) {
             Log.e(TAG, ioe.getMessage());
         } catch (JSONException jse) {
             Log.e(TAG, jse.getMessage());
         }
-        return contrato;
+        return contratoList;
     }
 
     private void parseContratos(List<Contrato> contratoList, JSONObject jsonBody)
@@ -180,11 +161,11 @@ public class EContasFetchr {
 
         JSONArray contratoJSONArray = jsonBody.getJSONArray("contratos");
         for(int i = 0; i < contratoJSONArray.length(); i++) {
-            contratoList.add(parseContrato(contratoJSONArray.getJSONObject(i)));
+            parseContrato(contratoList, contratoJSONArray.getJSONObject(i));
         }
     }
 
-    private Contrato parseContrato(JSONObject jsonBody)
+    private void parseContrato(List<Contrato> contratoList, JSONObject jsonBody)
             throws IOException, JSONException {
         JSONObject contratoJsonObject = jsonBody.getJSONObject("contrato");
         Contrato contrato = new Contrato();
@@ -207,30 +188,32 @@ public class EContasFetchr {
                 contrato.getMedicaoLista().add(medicao);
             }
         }
-        return contrato;
+        contratoList.add(contrato);
     }
 
     /* ************************* MEDICAO *********************************/
-    public Medicao fetchMedicao(String medicao_str) {
-        Medicao medicao = null;
+    public List<Medicao> fetchMedicao(String bpID, String ctID, String mdID) {
+        List<Medicao> medicaoList = new ArrayList<>();
         try {
             String url = ENDPOINT.buildUpon()
                     .appendQueryParameter("method", FETCH_MEDICAO)
-                    .appendQueryParameter("arguments", medicao_str)
+                    .appendQueryParameter("bpID", bpID)
+                    .appendQueryParameter("ctID", ctID)
+                    .appendQueryParameter("mdID", mdID)
                     .build().toString();
             // String jsonStringMedicao = getUrlString(url);
             String jsonStringMedicao = "{\"medicao\":{\"id\":\"abc\",\"numero\":\"1\",\"dataInicio\":\"12/06/2009\",\"dataFim\":\"14/12/2009\",\"contratoId\":\"456\"}}";
             JSONObject jsonBody = new JSONObject(jsonStringMedicao);
-            medicao = parseMedicao(jsonBody);
+            parseMedicao(medicaoList, jsonBody);
         } catch (IOException ioe) {
             Log.e(TAG, ioe.getMessage());
         } catch (JSONException jse) {
             Log.e(TAG, jse.getMessage());
         }
-        return medicao;
+        return medicaoList;
     }
 
-    private Medicao parseMedicao (JSONObject jsonBody)
+    private void parseMedicao (List<Medicao> medicaoList, JSONObject jsonBody)
         throws IOException, JSONException {
         JSONObject medicaoObject = jsonBody.getJSONObject("medicao");
         Medicao medicao = new Medicao();
@@ -239,8 +222,7 @@ public class EContasFetchr {
         medicao.setDataInicio(medicaoObject.getString("dataInicio"));
         medicao.setDataFim(medicaoObject.getString("dataFim"));
         medicao.setContratoId(medicaoObject.getString("contratoId"));
-
-        return medicao;
+        medicaoList.add(medicao);
     }
 
 

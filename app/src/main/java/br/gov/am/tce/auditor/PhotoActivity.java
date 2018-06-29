@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -44,10 +45,11 @@ import com.google.android.gms.tasks.Task;
 import java.io.File;
 import java.util.List;
 
-import br.gov.am.tce.auditor.domain.Photo;
-import br.gov.am.tce.auditor.helpers.AuditorPreferences;
-import br.gov.am.tce.auditor.helpers.PhotoLab;
-import br.gov.am.tce.auditor.helpers.PictureUtils;
+import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.model.Photo;
+import br.gov.am.tce.auditor.service.AuditorPreferences;
+import br.gov.am.tce.auditor.service.PhotoLab;
+import br.gov.am.tce.auditor.service.PictureUtils;
 
 
 /**
@@ -56,7 +58,7 @@ import br.gov.am.tce.auditor.helpers.PictureUtils;
 
 public class PhotoActivity extends AppCompatActivity {
     private static final String TAG = "PhotoActivity";
-    private static final String EXTRA_PHOTO_ID = "br.gov.am.tce.auditor.photo_id";
+    private static final String EXTRA_PHOTO_OBJ = "br.gov.am.tce.auditor.photo";
     private static final int REQUEST_PHOTO = 0;
     private static final int REQUEST_CHECK_SETTINGS = 1;
 
@@ -67,14 +69,13 @@ public class PhotoActivity extends AppCompatActivity {
 
     private Photo mPhoto;
     private File mPhotoFile;
+
     private ImageView mPhotoView;
     private final Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    private TextView photo_context_tv;
-
-    public static Intent newIntent(Context packageContext, String photoId) {
+    public static Intent newIntent(Context packageContext, Photo photo) {
         Intent intent = new Intent(packageContext, PhotoActivity.class);
-        intent.putExtra(EXTRA_PHOTO_ID, photoId);
+        intent.putExtra(EXTRA_PHOTO_OBJ, photo);
         return intent;
     }
 
@@ -83,15 +84,11 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        String photoId = getIntent().getStringExtra(EXTRA_PHOTO_ID);
-        mPhoto = PhotoLab.get(this).getPhoto(photoId);
+        mPhoto = getIntent().getParcelableExtra(EXTRA_PHOTO_OBJ);
         mPhotoFile = PhotoLab.get(this).getPhotoFile(mPhoto);
 
         TextView photo_author_tv = findViewById(R.id.PHAuthor_TV);
         photo_author_tv.setText(AuditorPreferences.getUsername(this));
-
-        photo_context_tv = findViewById(R.id.PHContext_TV);
-        photo_context_tv.setText(mPhoto.getBemPublico() + "/" + mPhoto.getContrato() + "/" + mPhoto.getMedicao());
 
         /* location code initialization ******************/
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -152,19 +149,11 @@ public class PhotoActivity extends AppCompatActivity {
         startLocationUpdates();
     }
 
-    public void onClearButtonClick(View v) {
-        mPhoto.setBemPublico("");
-        mPhoto.setContrato("");
-        mPhoto.setMedicao("");
-
-        photo_context_tv.setText("");
-    }
-
     private void startLocationUpdates() {
         try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         } catch (SecurityException se) {
-            Log.e(TAG, se.getMessage());
+            Log.d(TAG, se.getMessage());
         }
     }
 
@@ -177,6 +166,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     private void stopLocationUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        finish();
     }
 
     private void configureLocationRequest() {
@@ -228,19 +218,10 @@ public class PhotoActivity extends AppCompatActivity {
         startActivityForResult(captureImageIntent, REQUEST_PHOTO);
     }
 
-    private void updatePhotoView() {
-        if(mPhotoFile == null || !mPhotoFile.exists()) {
-            mPhotoView.setImageDrawable(null);
-        } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), this);
-            mPhotoView.setImageBitmap(bitmap);
-        }
-    }
-
-    /** menu methods *****************************/
+    /**************** menu methods ***************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_photo, menu);
+        getMenuInflater().inflate(R.menu.photo_activity_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -259,7 +240,42 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    /** callback from takePhoto and location request configuration ************/
+    public void onClearButtonClick(View v) {
+        mPhoto.setBemPublico("");
+        mPhoto.setContrato("");
+        mPhoto.setMedicao("");
+
+        updatePhotoView();
+    }
+
+    public void onSearchButtonClick(View v) {
+        FindContextHandler.get().findContext(this, mPhoto);
+        finish();
+    }
+
+    private void updatePhotoView() {
+        if(mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), this);
+            mPhotoView.setImageBitmap(bitmap);
+        }
+
+        boolean isContextClear = mPhoto.getBemPublico().equals("");
+        if(isContextClear) {
+            findViewById(R.id.PHClear_BTN).setVisibility(View.INVISIBLE);
+            findViewById(R.id.PHSearch_BTN).setVisibility(View.VISIBLE);
+            TextView contextTextView = findViewById(R.id.PHContext_TV);
+            contextTextView.setText("");
+        } else {
+            findViewById(R.id.PHClear_BTN).setVisibility(View.VISIBLE);
+            findViewById(R.id.PHSearch_BTN).setVisibility(View.INVISIBLE);
+            TextView contextTextView = findViewById(R.id.PHContext_TV);
+            String contextStr = String.format("%s / %s / %s",mPhoto.getBemPublico(),mPhoto.getContrato(),mPhoto.getMedicao());
+            contextTextView.setText(contextStr);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_PHOTO) {
@@ -272,5 +288,4 @@ public class PhotoActivity extends AppCompatActivity {
             // TODO: To handle check setting request
         }
     }
-
 }

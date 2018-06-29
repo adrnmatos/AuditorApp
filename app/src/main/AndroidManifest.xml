@@ -36,39 +36,22 @@
             android:label="Pesquisa"
             android:parentActivityName=".MainActivity"/>
 
-        <activity android:name=".SearchBensPublicosActivity"
-            android:label="Pesquisa"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".BemPublicoPagerActivity"/>
 
-        <activity android:name=".SearchContratosActivity"
-            android:label="Pesquisa"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ContratoPagerActivity"/>
 
-        <activity android:name=".BemPublicoPagerActivity"
-            android:label="@string/bem_publico"/>
+        <activity android:name=".MedicaoPagerActivity"/>
 
-        <activity android:name=".BemPublicoActivity"
-            android:label="Bem Público"/>
+        <activity android:name=".PhotoGridActivity"/>
 
-        <activity android:name=".ContratoPagerActivity"
-            android:label="Contrato"/>
-
-        <activity android:name=".ContratoActivity"
-            android:label="Contrato"/>
-
-        <activity android:name=".MedicaoActivity"
-            android:label="Medicao"/>
-
-        <activity android:name=".PhotoListActivity"/>
-
-        <activity android:name=".FilterActivity"/>
+        <activity android:name=".FilterFragment"/>
 
         <activity android:name=".PhotoActivity"
-            android:parentActivityName=".PhotoListActivity"
+            android:parentActivityName=".PhotoGridActivity"
             android:label="Foto"/>
 
-        <activity android:name=".MapsActivity"
-            android:parentActivityName=".PhotoListActivity"
+        <activity android:name=".MapActivity"
+            android:parentActivityName=".PhotoGridActivity"
             android:label="Mapa"/>
 
         <provider

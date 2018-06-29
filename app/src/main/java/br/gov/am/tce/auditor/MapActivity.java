@@ -5,22 +5,21 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.domain.Photo;
+import br.gov.am.tce.auditor.model.Photo;
 
 
 /**
  * Created by adrnm on 16/10/2017.
  */
 
-public class MapsActivity extends SingleFragmentActivity {
+public class MapActivity extends SingleFragmentActivity {
     private static final String EXTRA_PHOTO_LIST = "br.gov.am.tce.auditor.selectedPhotos";
 
     public static Intent newIntent(Context packageContext, List<Photo> photoList) {
-        Intent intent = new Intent(packageContext, MapsActivity.class);
+        Intent intent = new Intent(packageContext, MapActivity.class);
         intent.putParcelableArrayListExtra(EXTRA_PHOTO_LIST, (ArrayList<? extends Parcelable>) photoList);
         return intent;
     }
@@ -28,6 +27,6 @@ public class MapsActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
         List<Photo> photoList = getIntent().getParcelableArrayListExtra(EXTRA_PHOTO_LIST);
-        return new MapsFragment().newInstance(photoList);
+        return new MapFragment().newInstance(photoList);
     }
 }
