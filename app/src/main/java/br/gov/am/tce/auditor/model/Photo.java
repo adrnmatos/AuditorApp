@@ -4,6 +4,8 @@ package br.gov.am.tce.auditor.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -19,10 +21,7 @@ public class Photo implements Parcelable {
     private String mBemPublico;
     private String mContrato;
     private String mMedicao;
-    /* TODO: attach user to photo */
-    /* private Usuario user;
-    *  public Usuario getUser();
-    *  public void setUser(Usuario user); */
+    private String mAuthor;
 
     public Photo(String id) {
         mId = id;
@@ -33,10 +32,11 @@ public class Photo implements Parcelable {
     }
 
     public Photo() {
-        this(UUID.randomUUID().toString());
+        /*this(UUID.randomUUID().toString());*/
     }
 
-    public Photo(String id, String title, double latitude, double longitude, long time, String bemPublico, String contrato, String medicao) {
+    public Photo(String id, String title, double latitude, double longitude, long time,
+                 String bemPublico, String contrato, String medicao, String author) {
         mId = id;
         mTitle = title;
         mLatitude = latitude;
@@ -45,6 +45,7 @@ public class Photo implements Parcelable {
         mBemPublico = bemPublico;
         mContrato = contrato;
         mMedicao = medicao;
+        mAuthor = author;
     }
 
     public Photo(Parcel in) {
@@ -56,6 +57,7 @@ public class Photo implements Parcelable {
         mBemPublico = in.readString();
         mContrato = in.readString();
         mMedicao = in.readString();
+        mAuthor = in.readString();
     }
 
     @Override
@@ -73,6 +75,7 @@ public class Photo implements Parcelable {
         parcel.writeString(mBemPublico);
         parcel.writeString(mContrato);
         parcel.writeString(mMedicao);
+        parcel.writeString(mAuthor);
     }
 
     public static final Parcelable.Creator<Photo> CREATOR = new Parcelable.Creator<Photo>() {
@@ -83,6 +86,20 @@ public class Photo implements Parcelable {
             return new Photo[size];
         }
     };
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", mId);
+        result.put("title", mTitle);
+        result.put("latitude", mLatitude);
+        result.put("longitude", mLongitude);
+        result.put("dataHora", mTime);
+        result.put("bemPublico", mBemPublico);
+        result.put("contrato", mContrato);
+        result.put("medicao", mMedicao);
+        result.put("author", mAuthor);
+        return result;
+    }
 
     public String getId() {
         return mId;
@@ -149,7 +166,15 @@ public class Photo implements Parcelable {
     }
 
     public String getPhotoFilename() {
-        return "IMG_" + getId().toString() + ".jpg";
+        return "IMG_" + getId() + ".jpg";
+    }
+
+    public String getAuthor() {
+        return mAuthor;
+    }
+
+    public void setAuthor(String author) {
+        mAuthor = author;
     }
 
 }

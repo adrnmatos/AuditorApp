@@ -43,4 +43,5 @@
     <string name="contrato_id">ID Contrato</string>
     <string name="done">OK</string>
     <string name="cancel">CANCELAR</string>
+    <string name="apply_context">Associar contexto</string>
 </resources>

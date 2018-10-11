@@ -20,7 +20,7 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".EntryActivity">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -29,8 +29,6 @@
 
         <activity android:name=".SignInActivity"
             android:label="Login"/>
-
-        <activity android:name=".MainActivity"/>
 
         <activity android:name=".SearchActivity"
             android:label="Pesquisa"
@@ -42,16 +40,14 @@
 
         <activity android:name=".MedicaoPagerActivity"/>
 
-        <activity android:name=".PhotoGridActivity"/>
-
-        <activity android:name=".FilterFragment"/>
+        <activity android:name=".GridActivity"/>
 
         <activity android:name=".PhotoActivity"
-            android:parentActivityName=".PhotoGridActivity"
+            android:parentActivityName=".GridActivity"
             android:label="Foto"/>
 
         <activity android:name=".MapActivity"
-            android:parentActivityName=".PhotoGridActivity"
+            android:parentActivityName=".GridActivity"
             android:label="Mapa"/>
 
         <provider

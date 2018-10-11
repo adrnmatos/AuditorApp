@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Adriano on 14/03/2018.
  */
 
-public class Contrato implements Parcelable {
+public class Contrato extends ContextObject implements Parcelable {
     private String id;
     private String numero;
     private String prazo;

@@ -1,10 +1,7 @@
 package br.gov.am.tce.auditor;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -16,13 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
-import br.gov.am.tce.auditor.model.BemPublico;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.Contrato;
 import br.gov.am.tce.auditor.model.Medicao;
-import br.gov.am.tce.auditor.model.Photo;
-import br.gov.am.tce.auditor.service.EContasFetchr;
-import br.gov.am.tce.auditor.service.PhotoLab;
 
 /**
  * Created by Adriano on 22/03/2018.
@@ -30,17 +23,14 @@ import br.gov.am.tce.auditor.service.PhotoLab;
 
 public class ContratoFragment extends Fragment {
     private static final String ARG_CONTRATO = "contract_arg";
-    private static final String ARG_IS_EDITING = "isEditing_arg";
 
     private Contrato mContrato = null;
-    private boolean isEditing;
     private Medicao selectedMedicao;
 
-    public static Fragment newInstance(Contrato contract, boolean isEditing) {
+    public static Fragment newInstance(Contrato contract) {
         Fragment fragment = new ContratoFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARG_CONTRATO, contract);
-        bundle.putBoolean(ARG_IS_EDITING, isEditing);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -51,7 +41,6 @@ public class ContratoFragment extends Fragment {
 
         Bundle bundle = getArguments();
         mContrato = bundle.getParcelable(ARG_CONTRATO);
-        isEditing = bundle.getBoolean(ARG_IS_EDITING, false);
     }
 
     @Nullable
@@ -79,7 +68,7 @@ public class ContratoFragment extends Fragment {
         ctBemPublico_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FindContextHandler.get().initBPFetch(getActivity(), mContrato.getBemPublico());
+                ContextHandler.get().fetchBPInit(getActivity(), mContrato.getBemPublico());
             }
         });
 
@@ -102,21 +91,11 @@ public class ContratoFragment extends Fragment {
             }
         });
 
-        if(!isEditing) {
-            FloatingActionButton fab = v.findViewById(R.id.fab);
-            fab.setVisibility(View.VISIBLE);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    FindContextHandler.get().onFABClick(getActivity());
-                }
-            });
-        }
 
         v.findViewById(R.id.CTFetchMedicoes_BTN).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FindContextHandler.get().initMDFetch(getActivity(), mContrato.getBemPublico(),
+                ContextHandler.get().fetchMDInit(getActivity(), mContrato.getBemPublico(),
                         mContrato.getId(), selectedMedicao.getId());
             }
         });

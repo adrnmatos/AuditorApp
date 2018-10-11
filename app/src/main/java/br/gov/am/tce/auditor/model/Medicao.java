@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Adriano on 15/03/2018.
  */
 
-public class Medicao implements Parcelable{
+public class Medicao extends ContextObject implements Parcelable{
     private String id;
     private String numero;
     private String dataInicio;

@@ -13,35 +13,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 
 /**
  * Created by Adriano on 23/04/2018.
  */
 
 public class SearchActivity extends AppCompatActivity {
-    private static final String EXTRA_IS_EDITING = "br.gov.am.tce.auditor.isEditing";
-
-    private boolean isEditing;
-
     private String municipioStr;
     private String jurisdicionadoStr;
 
-    public static Intent newIntent(Context packageContext, boolean isEditing) {
-        Intent intent = new Intent(packageContext, SearchActivity.class);
-        intent.putExtra(EXTRA_IS_EDITING, isEditing);
-        return intent;
+    public static Intent newIntent(Context packageContext) {
+        return new Intent(packageContext, SearchActivity.class);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bempublico_search);
-
-        isEditing = getIntent().getBooleanExtra(EXTRA_IS_EDITING, false);
-        if(!isEditing) {
-            findViewById(R.id.fab).setVisibility(View.VISIBLE);
-        }
 
         Spinner municipioSpinner = findViewById(R.id.searchBemPublicoMunicipio_SPN);
         ArrayAdapter<CharSequence> municipioAdapter = ArrayAdapter.createFromResource(this,
@@ -81,21 +70,14 @@ public class SearchActivity extends AppCompatActivity {
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FindContextHandler.get().initBPsFetch(SearchActivity.this, municipioStr, jurisdicionadoStr);
+                ContextHandler.get().fetchBPsInit(SearchActivity.this, municipioStr, jurisdicionadoStr);
             }
         });
     }
 
-    public void onNewPhotoFABClick(View v) {
-        FindContextHandler.get().onFABClick(this);
-        finish();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(isEditing) {
-            getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -103,10 +85,10 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ic_done:
-                FindContextHandler.get().onDone(this);
+                ContextHandler.get().onDone(this);
                 return false;
             case R.id.ic_cancel:
-                FindContextHandler.get().onCancel(this);
+                ContextHandler.get().onCancel(this);
                 return false;
             default:
                 return super.onOptionsItemSelected(item);

@@ -23,7 +23,7 @@ public class PhotoBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + PhotoTable.NAME + "(" +
             " _id integer primary key autoincrement, " +
                 PhotoTable.Cols.UUID + ", " +
-                //PhotoTable.Cols.AUTOR + ", " +
+                PhotoTable.Cols.AUTOR + ", " +
                 PhotoTable.Cols.TITLE + ", " +
                 PhotoTable.Cols.LATITUDE + ", " +
                 PhotoTable.Cols.LONGITUDE + ", " +

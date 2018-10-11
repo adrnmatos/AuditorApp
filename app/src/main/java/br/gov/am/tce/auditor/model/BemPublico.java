@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Adriano on 15/03/2018.
  */
 
-public class BemPublico implements Parcelable {
+public class BemPublico extends ContextObject implements Parcelable {
     private String id;
     private String area;
     private String latitude;

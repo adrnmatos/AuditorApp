@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.Contrato;
 
 public class FetchContratoTask extends AsyncTask<String, Void, List<Contrato>> {
@@ -27,7 +27,7 @@ public class FetchContratoTask extends AsyncTask<String, Void, List<Contrato>> {
     }
 
     @Override
-    protected void onPostExecute(List<Contrato> contratos) {
-        FindContextHandler.get().completeCTFetch(contratos);
+    protected void onPostExecute(List<Contrato> contratoList) {
+        ContextHandler.get().fetchCTComplete(contratoList);
     }
 }

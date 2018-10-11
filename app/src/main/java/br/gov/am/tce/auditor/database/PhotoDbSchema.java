@@ -10,7 +10,7 @@ public class PhotoDbSchema {
 
         public static final class Cols {
             public static final String UUID = "uuid";
-            //public static final String AUTOR = "autor";
+            public static final String AUTOR = "autor";
             public static final String TITLE = "title";
             public static final String LATITUDE = "latitude";
             public static final String LONGITUDE = "longitude";

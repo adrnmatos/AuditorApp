@@ -50,6 +50,16 @@ public class PhotoLab {
                 new String[] {id});
     }
 
+    public void updatePhotoId(Photo photo, String newID) {
+        String oldId = photo.getId();
+        photo.setId(newID);
+        ContentValues values = getContentValues(photo);
+
+        mDatabase.update(PhotoTable.NAME, values,
+                PhotoTable.Cols.UUID + " = ?",
+                new String[] {oldId});
+    }
+
     public void deletePhoto(Photo photo) {
 
         File file = getPhotoFile(photo);
@@ -114,7 +124,7 @@ public class PhotoLab {
 
     }
 
-    public List<Photo> searchPhotos(String author, String bemPublico, String contrato, String medicao) {
+    public List<Photo> searchPhotos(String bemPublico, String contrato, String medicao) {
         List<Photo> photos = new ArrayList<>();
 
         PhotoCursorWrapper cursor = queryPhotos(
@@ -159,6 +169,7 @@ public class PhotoLab {
     private static ContentValues getContentValues(Photo photo) {
         ContentValues values = new ContentValues();
         values.put(PhotoTable.Cols.UUID, photo.getId());
+        values.put(PhotoTable.Cols.AUTOR, photo.getAuthor());
         values.put(PhotoTable.Cols.TITLE, photo.getTitle());
         values.put(PhotoTable.Cols.LATITUDE, String.valueOf(photo.getLatitude()));
         values.put(PhotoTable.Cols.LONGITUDE, String.valueOf(photo.getLongitude()));

@@ -18,7 +18,7 @@ public class PhotoCursorWrapper extends CursorWrapper {
 
     public Photo getPhoto() {
         String uuidString = getString(getColumnIndex(PhotoTable.Cols.UUID));
-        //String autorString = getString(getColumnIndex(PhotoTable.Cols.AUTOR));
+        String autorString = getString(getColumnIndex(PhotoTable.Cols.AUTOR));
         String title = getString(getColumnIndex(PhotoTable.Cols.TITLE));
         Double latitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LATITUDE)));
         Double longitude = Double.valueOf(getString(getColumnIndex(PhotoTable.Cols.LONGITUDE)));
@@ -28,7 +28,7 @@ public class PhotoCursorWrapper extends CursorWrapper {
         String medicao = getString(getColumnIndex(PhotoTable.Cols.MEDICAO));
 
         Photo photo = new Photo(uuidString);
-        //photo.setAutor(autorString);
+        photo.setAuthor(autorString);
         photo.setTitle(title);
         photo.setLatitude(latitude);
         photo.setLongitude(longitude);

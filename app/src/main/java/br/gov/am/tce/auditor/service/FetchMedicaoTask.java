@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.Medicao;
 
 public class FetchMedicaoTask extends AsyncTask<String, Void, List<Medicao>> {
@@ -23,7 +23,7 @@ public class FetchMedicaoTask extends AsyncTask<String, Void, List<Medicao>> {
     }
 
     @Override
-    protected void onPostExecute(List<Medicao> medicoes) {
-        FindContextHandler.get().completeMDFetch(medicoes);
+    protected void onPostExecute(List<Medicao> medicaoList) {
+        ContextHandler.get().fetchMDComplete(medicaoList);
     }
 }

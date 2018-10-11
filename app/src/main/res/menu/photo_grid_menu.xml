@@ -15,15 +15,14 @@
         app:showAsAction="ifRoom|withText"/>
 
     <item
-        android:id="@+id/upload_photo"
+        android:id="@+id/upload_photos"
         android:icon="@drawable/ic_upload_photo"
         android:title="@string/upload_photo_list_menu"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/check_new_photos_on_server"
-        android:icon="@drawable/ic_check_new_photos_on_server"
-        android:title="@string/check_server"
+        android:id="@+id/apply_context"
+        android:title="@string/apply_context"
         app:showAsAction="never"/>
 
 </menu>

@@ -1,10 +1,7 @@
 package br.gov.am.tce.auditor;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,30 +11,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.BemPublico;
 import br.gov.am.tce.auditor.model.Contrato;
-import br.gov.am.tce.auditor.model.Photo;
-import br.gov.am.tce.auditor.service.EContasFetchr;
-import br.gov.am.tce.auditor.service.PhotoLab;
 
 /**
  * Created by Adriano on 28/03/2018.
  */
 
 public class BemPublicoFragment extends Fragment {
-    private static final String ARG_BEM_PUBLICO = "bemPublico_arg";
-    private static final String ARG_IS_EDITING = "isEditing_arg";
+    private static final String BEM_PUBLICO_ARG = "bemPublico_arg";
 
     private BemPublico mBemPublico = null;
-    private boolean isEditing;
     private Contrato selectedContract;
 
-    public static Fragment newInstance(BemPublico bemPublico, boolean isEditing) {
+    public static Fragment newInstance(BemPublico bemPublico) {
         Fragment fragment = new BemPublicoFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(ARG_BEM_PUBLICO, bemPublico);
-        bundle.putBoolean(ARG_IS_EDITING, isEditing);
+        bundle.putParcelable(BEM_PUBLICO_ARG, bemPublico);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -45,10 +36,8 @@ public class BemPublicoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Bundle bundle = getArguments();
-        mBemPublico = bundle.getParcelable(ARG_BEM_PUBLICO);
-        isEditing = bundle.getBoolean(ARG_IS_EDITING);
+        mBemPublico = bundle.getParcelable(BEM_PUBLICO_ARG);
     }
 
     @Nullable
@@ -80,12 +69,12 @@ public class BemPublicoFragment extends Fragment {
         TextView bpEndereco_tv = v.findViewById(R.id.BPEndereco_TV);
         bpEndereco_tv.setText(mBemPublico.getEndereco());
 
-        Spinner bpContratos_spn = v.findViewById(R.id.BPContratos_SPN);
-        ArrayAdapter<Contrato> contratosAdapter = new ArrayAdapter<Contrato>(getActivity(), android.R.layout.simple_spinner_item, mBemPublico.getContratos());
-        contratosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        bpContratos_spn.setAdapter(contratosAdapter);
+        Spinner bpContratoList_spn = v.findViewById(R.id.BPContratos_SPN);
+        ArrayAdapter<Contrato> contratoListAdapter = new ArrayAdapter<Contrato>(getActivity(), android.R.layout.simple_spinner_item, mBemPublico.getContratos());
+        contratoListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bpContratoList_spn.setAdapter(contratoListAdapter);
 
-        bpContratos_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        bpContratoList_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedContract = (Contrato) adapterView.getItemAtPosition(i);
@@ -97,21 +86,10 @@ public class BemPublicoFragment extends Fragment {
             }
         });
 
-        if(!isEditing) {
-            FloatingActionButton fab = v.findViewById(R.id.fab);
-            fab.setVisibility(View.VISIBLE);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    FindContextHandler.get().onFABClick(getActivity());
-                }
-            });
-        }
-
         v.findViewById(R.id.BPFetchContrato_BTN).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FindContextHandler.get().initCTFetch(getActivity(), selectedContract.getBemPublico(),
+                ContextHandler.get().fetchCTInit(getActivity(), selectedContract.getBemPublico(),
                         selectedContract.getId());
             }
         });

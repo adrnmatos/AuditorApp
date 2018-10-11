@@ -16,25 +16,20 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.BemPublico;
-import br.gov.am.tce.auditor.model.Photo;
 
 /**
  * Created by Adriano on 24/04/2018.
  */
 
 public class BemPublicoPagerActivity extends AppCompatActivity {
-    private static final String EXTRA_BEM_PUBLICO_LIST = "br.gov.am.tce.auditor.bempublicoList";
-    private static final String EXTRA_IS_EDITING = "br.gov.am.tce.auditor.isEditing";
+    private static final String BEM_PUBLICO_EXTRA = "br.gov.am.tce.auditor.bem_publicoList";
+    private List<BemPublico> mBemPublicoList = new ArrayList<>();
 
-    private List<BemPublico> mBensPublicos = new ArrayList<>();
-    private boolean isEditing;
-
-    public static Intent newIntent(Context context, List<BemPublico> bemPublicoList, boolean isEditing) {
+    public static Intent newIntent(Context context, List<BemPublico> bemPublicoList) {
         Intent intent = new Intent(context, BemPublicoPagerActivity.class);
-        intent.putParcelableArrayListExtra(EXTRA_BEM_PUBLICO_LIST, (ArrayList<? extends Parcelable>) bemPublicoList);
-        intent.putExtra(EXTRA_IS_EDITING, isEditing);
+        intent.putParcelableArrayListExtra(BEM_PUBLICO_EXTRA, (ArrayList<? extends Parcelable>) bemPublicoList);
         return intent;
     }
 
@@ -43,29 +38,27 @@ public class BemPublicoPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
 
-        mBensPublicos = getIntent().getParcelableArrayListExtra(EXTRA_BEM_PUBLICO_LIST);
-        isEditing = getIntent().getBooleanExtra(EXTRA_IS_EDITING, false);
+        mBemPublicoList = getIntent().getParcelableArrayListExtra(BEM_PUBLICO_EXTRA);
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         FragmentManager fragmentManager = getSupportFragmentManager();
         viewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
-                BemPublico bemPublico = mBensPublicos.get(position);
-
-                return BemPublicoFragment.newInstance(bemPublico, isEditing);
+                BemPublico bemPublico = mBemPublicoList.get(position);
+                return BemPublicoFragment.newInstance(bemPublico);
             }
 
             @Override
             public int getCount() {
-                return mBensPublicos.size();
+                return mBemPublicoList.size();
             }
         });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                FindContextHandler.get().swipeBP(mBensPublicos.get(position).getId());
+                ContextHandler.get().bpPagerSwipe(mBemPublicoList.get(position).getId());
             }
 
             @Override
@@ -82,9 +75,7 @@ public class BemPublicoPagerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(isEditing) {
-            getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -92,10 +83,10 @@ public class BemPublicoPagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.ic_done:
-                FindContextHandler.get().onDone(this);
+                ContextHandler.get().onDone(this);
                 return false;
             case R.id.ic_cancel:
-                FindContextHandler.get().onCancel(this);
+                ContextHandler.get().onCancel(this);
                 return false;
             default:
                 return super.onOptionsItemSelected(item);

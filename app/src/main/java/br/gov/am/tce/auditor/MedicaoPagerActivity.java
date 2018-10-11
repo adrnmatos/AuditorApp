@@ -16,20 +16,17 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.Medicao;
 
 public class MedicaoPagerActivity extends AppCompatActivity {
-    public static final String EXTRA_MEDICAO_LIST = "br.gov.am.tce.auditor.medicao";
-    public static final String EXTRA_IS_EDITING = "br.gov.am.tce.auditor.isEditing";
+    public static final String MEDICAO_EXTRA = "br.gov.am.tce.auditor.medicao";
 
     List<Medicao> mMedicaoList = new ArrayList<>();
-    boolean isEditing;
 
-    public static Intent newIntent(Context context, List<Medicao> medicaoList, boolean isEditing) {
+    public static Intent newIntent(Context context, List<Medicao> medicaoList) {
         Intent intent = new Intent(context, MedicaoPagerActivity.class);
-        intent.putParcelableArrayListExtra(EXTRA_MEDICAO_LIST, (ArrayList<? extends Parcelable>) medicaoList);
-        intent.putExtra(EXTRA_IS_EDITING, isEditing);
+        intent.putParcelableArrayListExtra(MEDICAO_EXTRA, (ArrayList<? extends Parcelable>) medicaoList);
         return intent;
     }
 
@@ -38,8 +35,7 @@ public class MedicaoPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
 
-        mMedicaoList = getIntent().getParcelableArrayListExtra(EXTRA_MEDICAO_LIST);
-        isEditing = getIntent().getBooleanExtra(EXTRA_IS_EDITING, false);
+        mMedicaoList = getIntent().getParcelableArrayListExtra(MEDICAO_EXTRA);
 
         ViewPager pager = findViewById(R.id.view_pager);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -47,7 +43,7 @@ public class MedicaoPagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Medicao medicao = mMedicaoList.get(position);
-                return MedicaoFragment.newInstance(medicao, isEditing);
+                return MedicaoFragment.newInstance(medicao);
             }
 
             @Override
@@ -55,13 +51,28 @@ public class MedicaoPagerActivity extends AppCompatActivity {
                 return mMedicaoList.size();
             }
         });
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                ContextHandler.get().mdPagerSwipe(mMedicaoList.get(position).getId());
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(isEditing) {
-            getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -69,10 +80,10 @@ public class MedicaoPagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ic_done:
-                FindContextHandler.get().onDone(this);
+                ContextHandler.get().onDone(this);
                 return false;
             case R.id.ic_cancel:
-                FindContextHandler.get().onCancel(this);
+                ContextHandler.get().onCancel(this);
                 return false;
             default:
                 return super.onOptionsItemSelected(item);

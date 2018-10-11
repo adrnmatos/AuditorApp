@@ -17,25 +17,20 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.am.tce.auditor.control.FindContextHandler;
+import br.gov.am.tce.auditor.control.ContextHandler;
 import br.gov.am.tce.auditor.model.Contrato;
-import br.gov.am.tce.auditor.model.Photo;
 
 /**
  * Created by Adriano on 19/03/2018.
  */
 
 public class ContratoPagerActivity extends AppCompatActivity {
-    private static final String EXTRA_CONTRACT_LIST = "br.gov.am.tce.auditor.contratoList";
-    private static final String EXTRA_IS_EDITING = "br.gov.am.tce.auditor.isEditing";
-
+    private static final String CONTRACT_EXTRA = "br.gov.am.tce.auditor.contratoList";
     private List<Contrato> mContracts = new ArrayList<>();
-    private boolean isEditing;
 
-    public static Intent newIntent(Context context, List<Contrato> contracts, boolean isEditing) {
+    public static Intent newIntent(Context context, List<Contrato> contracts) {
         Intent intent = new Intent(context, ContratoPagerActivity.class);
-        intent.putParcelableArrayListExtra(EXTRA_CONTRACT_LIST, (ArrayList<? extends Parcelable>) contracts);
-        intent.putExtra(EXTRA_IS_EDITING, isEditing);
+        intent.putParcelableArrayListExtra(CONTRACT_EXTRA, (ArrayList<? extends Parcelable>) contracts);
         return intent;
     }
 
@@ -43,9 +38,7 @@ public class ContratoPagerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
-
-        mContracts = getIntent().getParcelableArrayListExtra(EXTRA_CONTRACT_LIST);
-        isEditing = getIntent().getBooleanExtra(EXTRA_IS_EDITING, false);
+        mContracts = getIntent().getParcelableArrayListExtra(CONTRACT_EXTRA);
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -53,7 +46,7 @@ public class ContratoPagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Contrato contract = mContracts.get(position);
-                return ContratoFragment.newInstance(contract, isEditing);
+                return ContratoFragment.newInstance(contract);
             }
 
             @Override
@@ -61,13 +54,28 @@ public class ContratoPagerActivity extends AppCompatActivity {
                 return mContracts.size();
             }
         });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                ContextHandler.get().ctPagerSwipe(mContracts.get(position).getId());
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(isEditing) {
-            getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -75,10 +83,10 @@ public class ContratoPagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.ic_done:
-                FindContextHandler.get().onDone(this);
+                ContextHandler.get().onDone(this);
                 return false;
             case R.id.ic_cancel:
-                FindContextHandler.get().onCancel(this);
+                ContextHandler.get().onCancel(this);
                 return false;
             default:
                 return super.onOptionsItemSelected(item);
