@@ -118,7 +118,9 @@ public class PhotoHandler {
     public void applyContext() throws Exception {
         List<Photo> photoList = new ArrayList<>();
         photoList.add(mPhoto);
-        ContextHandler.get().applyContextSinglePhoto((Activity)mContext, photoList);
+//      THIS SHOULD BE USING REFACTORED CONTEXT HANDLER CLASS
+//
+//       ContextHandler.get().applyContextSinglePhoto((Activity)mContext, photoList);
     }
 
     /* ***************** CAMERA **********************/

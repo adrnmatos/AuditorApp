@@ -1,4 +1,6 @@
 package br.gov.am.tce.auditor.model;
 
-public abstract class ContextObject {
+import android.os.Parcelable;
+
+public abstract class ContextObject implements Parcelable {
 }

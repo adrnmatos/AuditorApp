@@ -6,12 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import br.gov.am.tce.auditor.control.ContextHandler;
+import br.gov.am.tce.auditor.control.BemPublicoHandler;
 import br.gov.am.tce.auditor.model.BemPublico;
 import br.gov.am.tce.auditor.model.Contrato;
 
@@ -19,11 +16,10 @@ import br.gov.am.tce.auditor.model.Contrato;
  * Created by Adriano on 28/03/2018.
  */
 
-public class BemPublicoFragment extends Fragment {
-    private static final String BEM_PUBLICO_ARG = "bemPublico_arg";
-
-    private BemPublico mBemPublico = null;
-    private Contrato selectedContract;
+public class BemPublicoFragment extends Fragment implements View.OnClickListener {
+    private static final String BEM_PUBLICO_ARG = "BEM_PUBLICO_ARG";
+    private BemPublico mBemPublico;
+    private BemPublicoHandler mBemPublicoHandler;
 
     public static Fragment newInstance(BemPublico bemPublico) {
         Fragment fragment = new BemPublicoFragment();
@@ -36,8 +32,8 @@ public class BemPublicoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        mBemPublico = bundle.getParcelable(BEM_PUBLICO_ARG);
+        mBemPublico = getArguments().getParcelable(BEM_PUBLICO_ARG);
+        mBemPublicoHandler = new BemPublicoHandler((ContextPagerActivity) getActivity());
     }
 
     @Nullable
@@ -69,32 +65,13 @@ public class BemPublicoFragment extends Fragment {
         TextView bpEndereco_tv = v.findViewById(R.id.BPEndereco_TV);
         bpEndereco_tv.setText(mBemPublico.getEndereco());
 
-        Spinner bpContratoList_spn = v.findViewById(R.id.BPContratos_SPN);
-        ArrayAdapter<Contrato> contratoListAdapter = new ArrayAdapter<Contrato>(getActivity(), android.R.layout.simple_spinner_item, mBemPublico.getContratos());
-        contratoListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        bpContratoList_spn.setAdapter(contratoListAdapter);
-
-        bpContratoList_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedContract = (Contrato) adapterView.getItemAtPosition(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        v.findViewById(R.id.BPFetchContrato_BTN).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContextHandler.get().fetchCTInit(getActivity(), selectedContract.getBemPublico(),
-                        selectedContract.getId());
-            }
-        });
+        v.findViewById(R.id.BPFetchContrato_BTN).setOnClickListener(this);
 
         return v;
+    }
+
+    public void onClick(View v) {
+        mBemPublicoHandler.getContratos();
     }
 
 }

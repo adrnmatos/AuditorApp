@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import br.gov.am.tce.auditor.control.ContextHandler;
+import br.gov.am.tce.auditor.control.MedicaoHandler;
 import br.gov.am.tce.auditor.model.Medicao;
 
 public class MedicaoFragment extends Fragment {
-    private static final String MEDICAO_ARG = "medicao_arg";
+    private static final String MEDICAO_ARG = "MEDICAO_ARG";
     private Medicao mMedicao;
+    private MedicaoHandler mMedicaoHandler;
 
     public static Fragment newInstance(Medicao medicao) {
         Fragment fragment = new MedicaoFragment();
@@ -29,6 +31,7 @@ public class MedicaoFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMedicao = getArguments().getParcelable(MEDICAO_ARG);
+        mMedicaoHandler = new MedicaoHandler((ContextPagerActivity)getActivity());
     }
 
     @Nullable
@@ -56,7 +59,7 @@ public class MedicaoFragment extends Fragment {
         mdCTId_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContextHandler.get().fetchCTFromMD(getActivity(), mMedicao.getContratoId());
+                mMedicaoHandler.getContrato();
             }
         });
 

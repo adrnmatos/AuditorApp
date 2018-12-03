@@ -85,15 +85,6 @@
         app:layout_constraintStart_toStartOf="@+id/bpGuide1"
         app:layout_constraintTop_toBottomOf="@+id/bpLabel7" />
 
-    <TextView
-        android:id="@+id/bpLabel9"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/contrato_lista"
-        app:layout_constraintStart_toStartOf="@+id/bpGuide1"
-        app:layout_constraintTop_toBottomOf="@+id/bpLabel8" />
-
     <android.support.constraint.Guideline
         android:id="@+id/bpGuide2"
         android:layout_width="wrap_content"
@@ -165,22 +156,14 @@
         app:layout_constraintStart_toStartOf="@+id/bpGuide2"
         app:layout_constraintTop_toBottomOf="@+id/BPJurisdicionado_TV" />
 
-    <Spinner
-        android:id="@+id/BPContratos_SPN"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/bpGuide2"
-        app:layout_constraintTop_toBottomOf="@+id/BPEndereco_TV" />
-
     <Button
         android:id="@+id/BPFetchContrato_BTN"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:text="@string/buscar_contrato_btn"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/BPContratos_SPN" />
+        app:layout_constraintTop_toBottomOf="@+id/BPEndereco_TV" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
@@ -189,16 +172,5 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9557292" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_menu_add"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

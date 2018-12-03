@@ -34,13 +34,10 @@
             android:label="Pesquisa"
             android:parentActivityName=".MainActivity"/>
 
-        <activity android:name=".BemPublicoPagerActivity"/>
+        <activity android:name=".ContextPagerActivity" />
 
-        <activity android:name=".ContratoPagerActivity"/>
-
-        <activity android:name=".MedicaoPagerActivity"/>
-
-        <activity android:name=".GridActivity"/>
+        <activity android:name=".GridActivity"
+            android:launchMode="singleTop"/>
 
         <activity android:name=".PhotoActivity"
             android:parentActivityName=".GridActivity"

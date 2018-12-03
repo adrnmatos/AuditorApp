@@ -19,7 +19,7 @@ public class BemPublico extends ContextObject implements Parcelable {
     private String nome;
     private String jurisdicionado;
     private String endereco;
-    private List<Contrato> contratoLista = new ArrayList<>();
+    private List<ContextObject> contratoLista = new ArrayList<>();
 
     public BemPublico() {}
 
@@ -127,11 +127,11 @@ public class BemPublico extends ContextObject implements Parcelable {
         this.endereco = endereco;
     }
 
-    public List<Contrato> getContratos() {
+    public List<ContextObject> getContratos() {
         return contratoLista;
     }
 
-    public void setContratos(List<Contrato> contratoLista) {
+    public void setContratos(List<ContextObject> contratoLista) {
         this.contratoLista = contratoLista;
     }
 

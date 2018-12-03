@@ -68,15 +68,6 @@
         app:layout_constraintStart_toStartOf="@+id/ctGuide1"
         app:layout_constraintTop_toBottomOf="@+id/ctLabel5" />
 
-    <TextView
-        android:id="@+id/ctLabel7"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/medicao_lista"
-        app:layout_constraintStart_toStartOf="@+id/ctGuide1"
-        app:layout_constraintTop_toBottomOf="@+id/ctLabel6" />
-
     <android.support.constraint.Guideline
         android:id="@+id/ctGuide2"
         android:layout_width="wrap_content"
@@ -133,23 +124,14 @@
         app:layout_constraintTop_toBottomOf="@+id/CTBemPublico_TV" />
 
 
-    <Spinner
-        android:id="@+id/CTMedicoes_SPN"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/ctGuide2"
-        app:layout_constraintTop_toBottomOf="@+id/CTContratado_TV" />
-
     <Button
         android:id="@+id/CTFetchMedicoes_BTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="64dp"
         android:text="@string/fetch_medicao_btn"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toBottomOf="@+id/CTMedicoes_SPN" />
+        app:layout_constraintTop_toBottomOf="@+id/CTContratado_TV" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline9"

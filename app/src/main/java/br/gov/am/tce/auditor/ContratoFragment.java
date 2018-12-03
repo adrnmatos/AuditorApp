@@ -8,29 +8,24 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import br.gov.am.tce.auditor.control.ContextHandler;
+import br.gov.am.tce.auditor.control.ContratoHandler;
 import br.gov.am.tce.auditor.model.Contrato;
-import br.gov.am.tce.auditor.model.Medicao;
 
 /**
  * Created by Adriano on 22/03/2018.
  */
 
-public class ContratoFragment extends Fragment {
-    private static final String ARG_CONTRATO = "contract_arg";
+public class ContratoFragment extends Fragment implements View.OnClickListener {
+    private static final String CONTRATO_ARG = "CONTRATO_ARG";
+    private Contrato mContrato;
+    private ContratoHandler mContratoHandler;
 
-    private Contrato mContrato = null;
-    private Medicao selectedMedicao;
-
-    public static Fragment newInstance(Contrato contract) {
+    public static Fragment newInstance(Contrato contrato) {
         Fragment fragment = new ContratoFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(ARG_CONTRATO, contract);
+        bundle.putParcelable(CONTRATO_ARG, contrato);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -38,9 +33,8 @@ public class ContratoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle = getArguments();
-        mContrato = bundle.getParcelable(ARG_CONTRATO);
+        mContrato = getArguments().getParcelable(CONTRATO_ARG);
+        mContratoHandler = new ContratoHandler((ContextPagerActivity) getActivity());
     }
 
     @Nullable
@@ -68,39 +62,20 @@ public class ContratoFragment extends Fragment {
         ctBemPublico_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContextHandler.get().fetchBPInit(getActivity(), mContrato.getBemPublico());
+                mContratoHandler.getBemPublico(mContrato.getBemPublico());
             }
         });
 
         TextView ctContratado_tv = v.findViewById(R.id.CTContratado_TV);
         ctContratado_tv.setText(mContrato.getContratado());
 
-        Spinner ctMedicoes_spn = v.findViewById(R.id.CTMedicoes_SPN);
-        ArrayAdapter<Medicao> medicoesAdapter = new ArrayAdapter<Medicao>(getActivity(), android.R.layout.simple_spinner_item, mContrato.getMedicaoLista());
-        medicoesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ctMedicoes_spn.setAdapter(medicoesAdapter);
-        ctMedicoes_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedMedicao = (Medicao) adapterView.getItemAtPosition(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-        v.findViewById(R.id.CTFetchMedicoes_BTN).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContextHandler.get().fetchMDInit(getActivity(), mContrato.getBemPublico(),
-                        mContrato.getId(), selectedMedicao.getId());
-            }
-        });
+        v.findViewById(R.id.CTFetchMedicoes_BTN).setOnClickListener(this);
 
         return v;
+    }
+
+    public void onClick(View v) {
+        mContratoHandler.getMedicao();
     }
 
 }
