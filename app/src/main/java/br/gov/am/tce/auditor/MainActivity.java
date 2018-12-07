@@ -18,15 +18,17 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import br.gov.am.tce.auditor.control.MainHandler;
+
 /**
  * Created by Adriano on 23/04/2018.
  */
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int REQUEST_ERROR = 0;
     private static final int PERMISSION_REQUEST_LOCATION = 1;
 
+    private MainHandler mHandler;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mHandler = new MainHandler(this);
 
         // check if google services are installed
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void myNeighborhoodMethod(View v) {
-
+    public void downloadMethod(View v) {
+        mHandler.downloadPhotos();
     }
 }

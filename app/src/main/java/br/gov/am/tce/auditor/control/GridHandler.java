@@ -12,6 +12,7 @@ import br.gov.am.tce.auditor.ContextPagerActivity;
 import br.gov.am.tce.auditor.DAO.ImageDBHandler;
 import br.gov.am.tce.auditor.MapActivity;
 import br.gov.am.tce.auditor.PhotoActivity;
+import br.gov.am.tce.auditor.model.ContextObject;
 import br.gov.am.tce.auditor.model.Photo;
 import br.gov.am.tce.auditor.service.AuditorPreferences;
 import br.gov.am.tce.auditor.service.PhotoLab;
@@ -59,7 +60,7 @@ public class GridHandler {
     }
 
     public void downloadPhotos() {
-        imageHandler.downloadPhotos();
+        imageHandler.downloadPhotos(new ArrayList<ContextObject>());
     }
 
     public void mapPhotos() {

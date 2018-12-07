@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.gov.am.tce.auditor.DAO.ImageDBHandler;
 import br.gov.am.tce.auditor.SearchActivity;
 import br.gov.am.tce.auditor.model.ContextObject;
 import br.gov.am.tce.auditor.model.Photo;
@@ -25,6 +26,7 @@ public class ContextHandler{
     private String mCT;
     private String mMD;
     private List<ContextObject> contextObjectList = new ArrayList<>();
+    private List<ContextObject> downloadList = new ArrayList<>();
 
 
     public ContextHandler(Context context, List<Photo> photos) {
@@ -34,21 +36,38 @@ public class ContextHandler{
     }
 
     public void applyContext() {
-        if(photoList.size() == 0)
-            return;
-
-        if(photoList.size() == 1)
-            if(!photoList.get(0).getBemPublico().isEmpty()) {
-                mBP = photoList.get(0).getBemPublico();
-                mCT = photoList.get(0).getContrato();
-                mMD = photoList.get(0).getMedicao();
-
-/*                contextObjectList = new EContasFetcher().fetchMedicao(mBP, mCT, mMD);*/
+        // download photos only
+        if(photoList == null) {
+            Intent searchIntent = new Intent(mContext, SearchActivity.class);
+            ((Activity)mContext).startActivityForResult(searchIntent, SEARCH_REQUEST_CODE);
+        }
+        // context assignment
+        else {
+            // security check
+            if(photoList.size() == 0)
                 return;
-            }
 
-        Intent searchIntent = new Intent(mContext, SearchActivity.class);
-        ((Activity)mContext).startActivityForResult(searchIntent, SEARCH_REQUEST_CODE);
+            // from grid activity
+            if(photoList.size() > 1) {
+                Intent searchIntent = new Intent(mContext, SearchActivity.class);
+                ((Activity)mContext).startActivityForResult(searchIntent, SEARCH_REQUEST_CODE);
+            }
+            // just one selected photo
+            else {
+                if(photoList.get(0).getBemPublico().isEmpty()) {
+                    Intent searchIntent = new Intent(mContext, SearchActivity.class);
+                    ((Activity)mContext).startActivityForResult(searchIntent, SEARCH_REQUEST_CODE);
+                }
+                // initiate assign from actual context
+                else {
+                    mBP = photoList.get(0).getBemPublico();
+                    mCT = photoList.get(0).getContrato();
+                    mMD = photoList.get(0).getMedicao();
+
+                    // contextObjectList = new EContasFetcher().fetchMedicao(mBP, mCT, mMD);
+                }
+            }
+        }
     }
 
     public String getBP() {
@@ -95,16 +114,19 @@ public class ContextHandler{
 
     /* ***************** MENU SELECTION HANDLING *************************/
     public void onDone() {
-        for(Photo photo: photoList) {
-            if(photo.getAuthor().equals(AuditorPreferences.getUsername(mContext))) {
-                photo.setBemPublico(this.mBP);
-                photo.setContrato(this.mCT);
-                photo.setMedicao(this.mMD);
-                PhotoLab.get(mContext).updatePhoto(photo);
-            } else {
-                Toast.makeText(mContext, "you cannot edit other authors photo", Toast.LENGTH_LONG).show();
+        if(photoList != null) {
+            for(Photo photo: photoList) {
+                if(photo.getAuthor().equals(AuditorPreferences.getUsername(mContext))) {
+                    photo.setBemPublico(this.mBP);
+                    photo.setContrato(this.mCT);
+                    photo.setMedicao(this.mMD);
+                    PhotoLab.get(mContext).updatePhoto(photo);
+                } else {
+                    Toast.makeText(mContext, "you cannot edit other authors photo", Toast.LENGTH_LONG).show();
+                }
             }
         }
+        new ImageDBHandler(mContext).downloadPhotos(downloadList);
         ((Activity)mContext).finish();
     }
 

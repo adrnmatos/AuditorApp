@@ -26,15 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.gov.am.tce.auditor.model.ContextObject;
 import br.gov.am.tce.auditor.model.Photo;
 import br.gov.am.tce.auditor.service.PhotoLab;
 
 public class ImageDBHandler {
-
     private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
     private Context mContext;
-    private static ImageDBHandler sImageDBHandler;
     private Photo storedPhoto = null;
 
     private List<String> photosTestList = new ArrayList<>();
@@ -177,7 +176,7 @@ public class ImageDBHandler {
     }
 
     // DOWNLOAD PHOTOS
-    public void downloadPhotos() {
+    public void downloadPhotos(List<ContextObject> downloadList) {
         DatabaseReference reference = mDatabaseReference.child("EE11491").child("456").child("abc");
         downloadPhotos(reference);
     }

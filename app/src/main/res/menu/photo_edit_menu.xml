@@ -21,6 +21,12 @@
         android:icon="@drawable/ic_check_new_photos_on_server"
         android:title="@string/check_server"
         android:visible="true"
-        app:showAsAction="ifRoom"/>
+        android:enabled="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/download_list"
+        android:title="@string/Download"
+        app:showAsAction="never"/>
 
 </menu>
