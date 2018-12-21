@@ -7,22 +7,21 @@
         android:icon="@android:drawable/ic_delete"
         android:title="@string/cancel"
         android:visible="true"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/ic_done"
         android:icon="@drawable/ic_search_done"
         android:title="@string/done"
         android:visible="true"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/download_photos"
         android:icon="@drawable/ic_check_new_photos_on_server"
         android:title="@string/check_server"
         android:visible="true"
-        android:enabled="false"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/download_list"

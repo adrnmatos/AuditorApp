@@ -23,7 +23,7 @@ public class GridHandler {
     private String bemPublicoFilterStr;
     private String contratoFilterStr;
     private String medicaoFilterStr;
-    private ImageDBHandler imageHandler;    // should be factory constructed
+    private ImageDBHandler imageHandler;    // SHOULD BE FACTORY CONSTRUCTED?
 
     public GridHandler(Context context) {
         mContext = context;
@@ -57,10 +57,6 @@ public class GridHandler {
 
     public void uploadPhotos() {
         imageHandler.uploadPhotos(mSelectedPhotoList);
-    }
-
-    public void downloadPhotos() {
-        imageHandler.downloadPhotos(new ArrayList<ContextObject>());
     }
 
     public void mapPhotos() {

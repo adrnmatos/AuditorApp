@@ -6,7 +6,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import br.gov.am.tce.auditor.ContextPagerActivity;
-import br.gov.am.tce.auditor.DAO.ImageDBHandler;
 import br.gov.am.tce.auditor.model.ContextObject;
 import br.gov.am.tce.auditor.service.EContasFetcher;
 
@@ -15,10 +14,6 @@ public class BemPublicoHandler {
 
     public BemPublicoHandler(ContextPagerActivity activity) {
         mActivity = activity;
-    }
-
-    public boolean isTherePhotosInContext() {
-        return new ImageDBHandler(mActivity).isTherePhotosInContext(mActivity.getContextHandler().getBP());
     }
 
     public void getContratos() {

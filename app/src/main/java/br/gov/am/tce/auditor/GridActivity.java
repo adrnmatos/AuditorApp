@@ -73,9 +73,6 @@ public class GridActivity extends AppCompatActivity implements FilterFragment.Ph
             case R.id.upload_photos:
                 gridHandler.uploadPhotos();
                 return true;
-            case R.id.download_photos:
-                gridHandler.downloadPhotos();
-                return true;
             case R.id.apply_context:
                 gridHandler.applyContext();
                 return true;

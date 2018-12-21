@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -50,7 +49,7 @@ public class ContextPagerActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.view_pager);
         updateUI();
 
-        mContextHandler.applyContext();
+        mContextHandler.initiateNavigation();
     }
 
     public void updateUI() {
@@ -68,7 +67,7 @@ public class ContextPagerActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.photo_edit_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu); // return true;
     }
 
     @Override
@@ -76,10 +75,13 @@ public class ContextPagerActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.ic_done:
                 mContextHandler.onDone();
-                return false;
+                return false; // return true;
             case R.id.ic_cancel:
                 mContextHandler.onCancel();
-                return false;
+                return false; // return true;
+            case R.id.download_photos:
+                mContextHandler.putInDownloadList();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -3,7 +3,6 @@ package br.gov.am.tce.auditor.control;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import br.gov.am.tce.auditor.SearchActivity;
 import br.gov.am.tce.auditor.model.ContextObject;
 import br.gov.am.tce.auditor.model.Photo;
 import br.gov.am.tce.auditor.service.AuditorPreferences;
-import br.gov.am.tce.auditor.service.EContasFetcher;
 import br.gov.am.tce.auditor.service.PhotoLab;
 
 public class ContextHandler{
@@ -26,16 +24,16 @@ public class ContextHandler{
     private String mCT;
     private String mMD;
     private List<ContextObject> contextObjectList = new ArrayList<>();
-    private List<ContextObject> downloadList = new ArrayList<>();
-
+    private ImageDBHandler imageHandler;
 
     public ContextHandler(Context context, List<Photo> photos) {
         mContext = context;
         photoList = photos;
         mBP = mCT = mMD = "";
+        imageHandler = new ImageDBHandler(mContext);
     }
 
-    public void applyContext() {
+    public void initiateNavigation() {
         // download photos only
         if(photoList == null) {
             Intent searchIntent = new Intent(mContext, SearchActivity.class);
@@ -52,13 +50,13 @@ public class ContextHandler{
                 Intent searchIntent = new Intent(mContext, SearchActivity.class);
                 ((Activity)mContext).startActivityForResult(searchIntent, SEARCH_REQUEST_CODE);
             }
-            // just one selected photo
+            // one photo selected
             else {
                 if(photoList.get(0).getBemPublico().isEmpty()) {
                     Intent searchIntent = new Intent(mContext, SearchActivity.class);
                     ((Activity)mContext).startActivityForResult(searchIntent, SEARCH_REQUEST_CODE);
                 }
-                // initiate assign from actual context
+                // initiate context assignment from actual context
                 else {
                     mBP = photoList.get(0).getBemPublico();
                     mCT = photoList.get(0).getContrato();
@@ -112,7 +110,17 @@ public class ContextHandler{
         }
     }
 
-    /* ***************** MENU SELECTION HANDLING *************************/
+    public void putInDownloadList() {
+        imageHandler.searchPhotos(imageHandler.buildDatabaseReference(mBP, mCT, mMD));
+        //        imageHandler.putInDownloadList(imageHandler.buildDatabaseReference(mBP, mCT, mMD));
+        imageHandler.downloadPhotos();
+    }
+
+    public ImageDBHandler getImageHandler() {
+        return imageHandler;
+    }
+
+    // MENU METHODS
     public void onDone() {
         if(photoList != null) {
             for(Photo photo: photoList) {
@@ -126,7 +134,7 @@ public class ContextHandler{
                 }
             }
         }
-        new ImageDBHandler(mContext).downloadPhotos(downloadList);
+        imageHandler.downloadPhotos();
         ((Activity)mContext).finish();
     }
 
